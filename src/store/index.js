@@ -12,4 +12,10 @@ const store = new Vuex.Store({
   }
 })
 
+export function setupStore() {
+  // store.dispatch('login/loadLocalLogin')
+  // console.log("st");
+  //同步localstroe 和vuex数据，
+}
+
 export default store

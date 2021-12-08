@@ -32,7 +32,10 @@ import {
   DropdownItem,
   Tree,
   Alert,
+  Aside,
   MessageBox,
+  Breadcrumb,
+  BreadcrumbItem,
  } from 'element-ui';
 
 export default Vue => {
@@ -44,7 +47,7 @@ export default Vue => {
   Vue.use(Footer)
   Vue.use(Menu)
   Vue.use(MenuItem)
-  // Vue.use()
+  Vue.use(Submenu)
   Vue.use(Radio)
   Vue.use(RadioGroup)
   Vue.use(RadioButton)
@@ -68,6 +71,9 @@ export default Vue => {
   Vue.use(DropdownItem)
   Vue.use(Tree)
   Vue.use(Alert)
+  Vue.use(Aside)
+  Vue.use(Breadcrumb);
+  Vue.use(BreadcrumbItem);
   Vue.prototype.$msgbox = MessageBox
   Vue.prototype.$message = Message
   Vue.prototype.$alert = MessageBox.alert
