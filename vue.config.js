@@ -9,6 +9,7 @@ module.exports = {
         'components': '@/components',
         'service': '@/service',
         'views': '@/views',
+        'router': '@/router'
       }
     }
   },

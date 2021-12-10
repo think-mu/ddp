@@ -13,10 +13,10 @@ Vue.use(element)
 
 
 new Vue({
-  store,
   router,
-  // created() {
-  //   setupStore()
-  // },
+  store,
+  created() {
+    setupStore()
+  },
   render: h => h(App)
 }).$mount('#app')

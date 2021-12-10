@@ -1,10 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import userMenus from 'utils/nav-menu.js'
+// import userMenus from 'utils/nav-menu.js'
 import { mapMenusRoutes } from 'utils/map-menus'
 const main = () => import('views/page/main')
 
 Vue.use(VueRouter)
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 const routes = [
   {
@@ -25,22 +30,22 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  mode: 'history'
+  mode: 'hash'
 })
 
-router.beforeEach((to,from,next) => {
+/* router.beforeEach((to,from,next) => {
   if (to.path == '/main') {
-  const routes = mapMenusRoutes(userMenus)
-  routes.forEach((route) => {
-    router.addRoute('main',route)
-  })
-  next()
+    const routes = mapMenusRoutes(userMenus)
+    routes.forEach((route) => {
+      router.addRoute('main',route)
+    })
+    next()
   // console.log(routes,"rrr");
   } 
   console.log(router.getRoutes(),"rrr");
 
   next()
   
-})
+}) */
 
 export default router

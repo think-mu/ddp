@@ -21,6 +21,8 @@ import qs from 'qs'
 import { login } from 'service/main/main'
 import NavMenu from '@/components/nav-menu/nav-menu'
 import NavHeader from '@/components/nav-header/nav-header'
+import userMenus from 'utils/nav-menu.js'
+
 export default {
   name: '',
   components: {
@@ -40,6 +42,13 @@ export default {
     login(qs.stringify(data)).then((res) => {
       console.log(res.data, 'xxxxx')
     })
+    this.getUserMenus()
+  },
+  methods: {
+    getUserMenus() {
+      // this.$store.commit('changeUserMenus', userMenus)
+      this.$store.dispatch('saveMenus',userMenus)
+    }
   }
 }
 </script>
