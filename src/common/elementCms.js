@@ -36,6 +36,9 @@ import {
   MessageBox,
   Breadcrumb,
   BreadcrumbItem,
+  Card,
+  Row,
+  Col,
  } from 'element-ui';
 
 export default Vue => {
@@ -74,6 +77,9 @@ export default Vue => {
   Vue.use(Aside)
   Vue.use(Breadcrumb);
   Vue.use(BreadcrumbItem);
+  Vue.use(Card);
+  Vue.use(Row);
+  Vue.use(Col);
   Vue.prototype.$msgbox = MessageBox
   Vue.prototype.$message = Message
   Vue.prototype.$alert = MessageBox.alert

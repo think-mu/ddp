@@ -17,8 +17,7 @@
 </template>
 
 <script>
-import qs from 'qs'
-import { login } from 'service/main/main'
+import { login } from 'service/main/detail/detail'
 import NavMenu from '@/components/nav-menu/nav-menu'
 import NavHeader from '@/components/nav-header/nav-header'
 import userMenus from 'utils/nav-menu.js'
@@ -33,15 +32,7 @@ export default {
     return {}
   },
   created() {
-    const data = {
-      region: "白云区",
-      level: 2,
-      action: "companyInfo",
-      type: "T01"
-    }
-    login(qs.stringify(data)).then((res) => {
-      console.log(res.data, 'xxxxx')
-    })
+
     this.getUserMenus()
   },
   methods: {

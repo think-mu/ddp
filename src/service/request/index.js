@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Loading } from 'element-ui'
-
+//设置请求动画默认值
 const DEAFULT_LOADING = false
 class SRequest {
   instance
@@ -8,17 +8,18 @@ class SRequest {
   loading
   constructor(config) {
     this.instance = axios.create(config)
+
     this.showLoad = config.showLoad || DEAFULT_LOADING
     //请求拦截器
     this.instance.interceptors.request.use(
       (config) => {
         // 判断是否存在token
-        // console.log(config, '全部')
         if (this.showLoad) {
           this.loading = Loading.service({
             lock: true,
             text: 'Loading',
-            background: 'rgba(0, 0, 0, 0.7)'
+            background: 'rgba(0, 0, 0, 0.7)',
+            target: document.querySelector('.page-content')
           })
         }
 
@@ -56,9 +57,8 @@ class SRequest {
         config = config.interceptors.requestInterceptor(config)
       }
       //判断是否需要loading
-      if (config.showLoad === false) {
+      if (config.showLoad === true) {
         this.showLoad = config.showLoad
-        // console.log(this.loading, '无动画')
       }
       this.instance
         .request(config)
@@ -66,7 +66,6 @@ class SRequest {
           if (config.interceptors) {
             res = config.interceptors.requestInterceptor(res)
           }
-          // console.log(res, '00')
           this.showLoad = DEAFULT_LOADING
           resolve(res)
         })
