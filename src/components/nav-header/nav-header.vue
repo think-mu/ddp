@@ -4,8 +4,8 @@
     <!-- <span>药品展示平台</span>  -->
     <div class="content">
       <div class="title"><span>药品展示平台</span></div>
-      <div class="crumbs">面包屑</div>
-      <div class="info">用户信息</div>
+      <!-- <div class="crumbs">面包屑</div> -->
+      <!-- <div class="info">用户信息</div> -->
     </div>
   </div>
 </template>

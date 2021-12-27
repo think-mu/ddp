@@ -1,6 +1,6 @@
-import sRequest from '../index';
-
-export function mainInfo(data) {
+import sRequest from '../../index';
+//分级分类数据接口
+export function categoryInfo(data) {
   return sRequest.post({
     url: '/rcms/EagleActions/ncStatisticsAction',
     data: data,

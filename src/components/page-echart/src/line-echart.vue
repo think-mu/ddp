@@ -1,5 +1,5 @@
 <template>
-  <div class="bar-chart">
+  <div class="line-chart">
     <base-echart :options="options" :height="height" @pieClick="barClick"></base-echart>
   </div>
 </template>
@@ -20,10 +20,10 @@ export default {
       type: String,
       default: '300px'
     },
-    xData: {
+    xLineData: {
       type: Array
     },
-    yData: {
+    LineData: {
       type: Array
     },
   },
@@ -35,49 +35,31 @@ export default {
     options() {
       return {
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
+          trigger: 'axis'
         },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '8%',
-          containLabel: true
+        grid: {  
+          bottom:'15%'  
+        },  
+        xAxis: {
+          type: 'category',
+          data: this.xLineData
         },
-        xAxis: [
-          {
-            type: 'category',
-            data: this.xData,
-            axisTick: {
-              alignWithLabel: true
-            }
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value'
-          }
-        ],
+        yAxis: {
+          type: 'value'
+        },
         series: [
           {
-            // name: 'Direct',
-            type: 'bar',
-            barWidth: '60%',
-            data: this.yData,
+            data: this.LineData,
+            type: 'line',
             label: {
               show: true,
               color: '#000',
               fontSize: 14,
               position: "top",
-              formatter: function (params) {
-                return params.value + '家'
-              }
-            },
+            }
           }
         ]
-      }
+      };
     }
   },
   methods: {

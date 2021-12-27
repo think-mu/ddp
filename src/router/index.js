@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import userMenus from 'utils/nav-menu.js'
-import { mapMenusRoutes } from 'utils/map-menus'
-const main = () => import('views/page/main')
+import { firstMenu } from 'utils/map-menus'
+const main = () => import('@/views/page/main')
 
 Vue.use(VueRouter)
 
@@ -18,6 +18,7 @@ const routes = [
   },
   {
     path: '/main',
+    // redirect: '/main/detail/detail',
     name: 'main',
     component: main
   },
@@ -33,19 +34,11 @@ const router = new VueRouter({
   mode: 'hash'
 })
 
-/* router.beforeEach((to,from,next) => {
-  if (to.path == '/main') {
-    const routes = mapMenusRoutes(userMenus)
-    routes.forEach((route) => {
-      router.addRoute('main',route)
-    })
-    next()
-  // console.log(routes,"rrr");
+router.beforeEach((to,from,next) => {
+  if (to.path === '/main') {
+    next({path:'/main/detail/detail'})
   } 
-  console.log(router.getRoutes(),"rrr");
-
   next()
-  
-}) */
+})
 
 export default router

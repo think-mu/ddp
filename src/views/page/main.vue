@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import { login } from 'service/main/detail/detail'
 import NavMenu from '@/components/nav-menu/nav-menu'
 import NavHeader from '@/components/nav-header/nav-header'
 import userMenus from 'utils/nav-menu.js'
@@ -79,7 +78,10 @@ export default {
   line-height: 200px;
   text-align: left;
   cursor: pointer;
-  background-color: #D7EFF8;
+  // background-color: #3e8fe6; //ui设计
+  background: linear-gradient(to top,#0f69ca, #d0f3ff) !important;
+
+  // background-color: #D7EFF8;
   transition: width 0.3s linear;
   scrollbar-width: none; /* firefox */
   -ms-overflow-style: none; /* IE 10+ */
@@ -93,6 +95,7 @@ export default {
   color: #333;
   text-align: center;
   background-color: #f0f2f5;
+  padding: 15px !important;
 }
 
 </style>

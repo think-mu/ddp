@@ -1,7 +1,7 @@
 <template>
   <div class="nav-menu">
     <el-menu
-      default-active="2"
+      default-active="1"
       class="el-menu-vertical"
       unique-opened
       background-color="#5F88AF"
@@ -50,7 +50,7 @@ import userMenus from 'utils/nav-menu.js'
     },
     methods: {
       handleMenuItemClick(item) {
-        console.log(item);
+        // console.log(item);
         if(item){
           this.$router.push(item.url)
         }else{

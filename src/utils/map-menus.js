@@ -1,3 +1,4 @@
+let firstMenu = null
 export function mapMenusRoutes(usersMenus) {
   // console.log(usersMenus,"usersMenus");
   const routes = []
@@ -18,6 +19,9 @@ export function mapMenusRoutes(usersMenus) {
          return route.path === menu.url
         })
         if(route) routes.push(route)
+        if (!firstMenu) {
+          firstMenu = menu
+        }
       }else {
         _recurseGetRoute(menu.children)
       }
@@ -28,3 +32,4 @@ export function mapMenusRoutes(usersMenus) {
 
   return routes
 }
+export { firstMenu }

@@ -2,19 +2,57 @@
   <div class="detail">
     <el-row :gutter="20">
       <el-col :span="12">
-        <s-card title="药品企业数量">
-          <map-echart height="615px" :mapData="mapData"></map-echart>
+        <s-card title="药品企业数量" class="map">
+          <div class="map-total">
+            <div class="map-total-hd">
+              <ul>
+                <li><span>{{ totalData.FHS }}</span><span>符合数</span></li>
+                <li><span>{{ totalData.ZGS }}</span><span>整改数</span></li>
+                <li><span>{{ totalData.JCS }}</span><span>检查数</span></li>
+                <li><span>{{ totalData.BFHS }}</span><span>不符合数</span></li>
+              </ul>
+            </div>
+          </div>
+          <map-echart height="615px" :mapData="mapData" mapName="detail"></map-echart>
         </s-card>
       </el-col>
       <el-col :span="12" class="content-right">
-        <s-card title="各类型药品企业数量">
-          <pie-echart height="240px" :pieData="pieData"></pie-echart>
+        <s-card
+          title="各类型药品企业数量"
+          class="content-right-pie"
+          flex="flex"
+        >
+          <pie-echart
+            height="240px"
+            :pieData="pieAllData"
+            :pieTitle="pieTitle1"
+            @pieClick="pieClick"
+          ></pie-echart>
+          <pie-echart
+            height="240px"
+            :pieData="pieAreaData"
+            :pieTitle="pieTitle2"
+          ></pie-echart>
         </s-card>
-        <s-card title="各类型药品企业数量">
-          <bar-echart height="280px" :xData="xData" :yData="yData"></bar-echart>
+        <s-card
+          title="各类型药品企业数量"
+          :isShowIcon="isShowIcon"
+          @changeShowIcon="changeShowIcon"
+        >
+          <bar-echart
+            height="280px"
+            :xData="xData"
+            :yData="yData"
+            @barClick="barClick"
+            v-show="!isShowIcon"
+          ></bar-echart>
+          <bar-echart
+            height="280px"
+            :xData="xData1"
+            :yData="yData1"
+            v-if="isShowIcon"
+          ></bar-echart>
         </s-card>
-        <!--         <div class="content-right-chart"></div>
-        <div class="content-right-chart"></div> -->
       </el-col>
     </el-row>
   </div>
@@ -26,7 +64,7 @@ import SCard from '@/base-ui/card/card'
 import PieEchart from '@/components/page-echart/src/pie-echart'
 import BarEchart from '@/components/page-echart/src/bar-echart'
 import MapEchart from '@/components/page-echart/src/map-echart'
-import { mapInfo } from 'service/main/detail/detail'
+import { entInfo, dataTotal } from 'service/main/detail/detail'
 
 export default {
   name: '',
@@ -38,61 +76,157 @@ export default {
   },
   data() {
     return {
-      option: {
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [
-          {
-            data: [120, 200, 150, 80, 70, 110, 130],
-            type: 'bar',
-            showBackground: true,
-            backgroundStyle: {
-              color: 'rgba(180, 180, 180, 0.2)'
-            }
-          }
-        ]
-      },
-      pieData: [
-        { value: 1048, name: 'Search Engine' },
-        { value: 735, name: 'Direct' },
-        { value: 580, name: 'Email' }
-      ],
-      xData: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      yData: [10, 52, 200, 334, 390, 330, 220],
-      mapData: []
+      pieAllData: [], //饼图数据
+      pieAreaData: [
+        {value: 100, name: "番禺区"},
+        {value: 100, name: "荔湾区"},
+        {value: 100, name: "天河区"},
+        {value: 100, name: "白云区"}],
+      pieTitle1: '各类型药品企业数量', //各类型药品企业数量饼图title
+      pieTitle2: '药品生产企业数量',
+      xData: [], //柱形图x轴数据
+      xData1: [],
+      yData: [], //柱形图y轴数据
+      yData1: [],
+      mapData: [], //地图数据
+      isShowIcon: false, //是否现实柱形图返回按钮
+      totalData: [] //今日统计数据
     }
   },
   created() {
+    //获取图表数据
     this.getMapData()
+    this.getPieAllData()
+    this.getPieAraeData('药品生产企业')
+    this.getTotalData()
   },
   mounted() {},
   methods: {
+    /* 数据获取 start */
+    //获取今天统计数据
+    getTotalData() {
+      const data = {
+        region: '',
+        action: 'today',
+        type: 'T01',
+        model: 1
+      }
+      dataTotal(qs.stringify(data)).then((res) => {
+        this.totalData = res.data[0]
+        console.log(res.data)
+      })
+    },
     //获取地图数据
     getMapData() {
       const data = {
         region: '',
         level: 1,
         action: 'companyInfo',
-        type: 'T01'
+        type: 'T01',
+        classname: ''
       }
-      mapInfo(qs.stringify(data)).then((res) => {
+      entInfo(qs.stringify(data)).then((res) => {
         this.mapData = res.data.map((item) => {
           return {
             name: item.REGION,
             value: item.NUM
           }
         })
-        console.log(rdata,"rdata");
       })
     },
-    reData() {
-      this.pieData[0].value += 200
+    //获取全市各类型企业数量
+    getPieAllData() {
+      const data = {
+        region: '',
+        level: 2,
+        action: 'companyInfo',
+        type: 'T01',
+        classname: ''
+      }
+      entInfo(qs.stringify(data)).then((res) => {
+        //更新饼图全市各类型企业数量
+        this.pieAllData = res.data.map((item) => {
+          return {
+            name: item.COMPANY_TYPE,
+            value: item.NUM
+          }
+        })
+        //更新柱形图x轴值
+        this.xData = res.data.map((item) => {
+          return {
+            value: item.COMPANY_TYPE
+          }
+        })
+        //更新柱形图y轴值
+        this.yData = res.data.map((item) => {
+          return {
+            value: item.NUM
+          }
+        })
+      })
+    },
+    //根据企业类型获取各区数量
+    getPieAraeData(area) {
+      const data = {
+        region: '',
+        level: 3,
+        action: 'companyInfo',
+        type: 'T01',
+        classname: area
+      }
+      entInfo(qs.stringify(data)).then((res) => {
+        this.pieAreaData = res.data.map((item) => {
+          return {
+            name: item.REGION,
+            value: item.NUM
+          }
+        })
+      })
+    },
+
+    getBarAraeData(area) {
+      const data = {
+        region: '',
+        level: 3,
+        action: 'companyInfo',
+        type: 'T01',
+        classname: area
+      }
+      entInfo(qs.stringify(data)).then((res) => {
+        //更新柱形图x轴值
+        this.xData1 = res.data.map((item) => {
+          return {
+            value: item.REGION
+          }
+        })
+        //更新柱形图y轴值
+        this.yData1 = res.data.map((item) => {
+          return {
+            value: item.NUM
+          }
+        })
+      })
+    },
+    /* 数据获取 end */
+
+    /* 饼图事件 start*/
+    pieClick(param) {
+      this.getPieAraeData(param.name)
+      this.pieTitle2 = param.name + '数量'
+    },
+    /* 饼图事件 end*/
+
+    /* 柱形图事件 start*/
+    barClick(param) {
+      this.getBarAraeData(param.name)
+      this.isShowIcon = true
+      console.log(param, '柱形图')
+    },
+    changeShowIcon(val) {
+      console.log(val)
+      this.isShowIcon = val
     }
+    /* 柱形图事件 end*/
   }
 }
 </script>
@@ -104,12 +238,44 @@ export default {
   .el-col {
     height: 100% !important;
   }
+  .map {
+    position: relative;
+    .map-total {
+      position: absolute;
+      top: 50px;
+      left: 0px;
+      // height: 100px;
+      
+      
+      &-hd {
+        ul {
+          display: flex;
+          width: 350px;
+          li {
+            flex: 1;
+            list-style-type: none;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+          }
+          span:first-child {
+            font-family: 'electronicFont';
+            line-height: 50px;
+            font-size: 40px;
+            color: #02a6b5;
+            
+          }
+          
+        }
+      }
+    }
+  }
 }
+
 .content-right {
   height: 100%;
   display: flex;
   flex-direction: column;
-  // justify-content: space-between;
   .el-card:last-child {
     margin-top: 15px;
   }
