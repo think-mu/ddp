@@ -6,13 +6,18 @@
           <div class="map-total">
             <div class="map-total-hd">
               <ul>
-                <li><span>{{ totalData.FHS }}</span><span>符合数</span></li>
-                <li><span>{{ totalData.ZGS }}</span><span>整改数</span></li>
-                <li><span>{{ totalData.JCS }}</span><span>检查数</span></li>
-                <li><span>{{ totalData.BFHS }}</span><span>不符合数</span></li>
+                <li><span>{{ totalData.FZS }}</span><span>许可证发证数</span></li>
+                <li><span>{{ totalData.GQS }}</span><span>许可证过期数</span></li>
               </ul>
             </div>
           </div>
+          <!-- <div class="map-content">
+             <div class="map1"><div class="point"></div> 花都区：1481家</div>
+             <div class="map1"><div class="point"></div> 花都区：1481家</div>
+             <div class="map1"><div class="point"></div> 花都区：1481家</div>
+             <div class="map1"><div class="point"></div> 花都区：1481家</div>
+
+          </div> -->
           <map-echart height="615px" :mapData="mapData" mapName="detail"></map-echart>
         </s-card>
       </el-col>
@@ -109,11 +114,11 @@ export default {
         region: '',
         action: 'today',
         type: 'T01',
-        model: 1
+        model: 2
       }
       dataTotal(qs.stringify(data)).then((res) => {
         this.totalData = res.data[0]
-        console.log(res.data)
+        // console.log(res.data)
       })
     },
     //获取地图数据
@@ -220,10 +225,10 @@ export default {
     barClick(param) {
       this.getBarAraeData(param.name)
       this.isShowIcon = true
-      console.log(param, '柱形图')
+      // console.log(param, '柱形图')
     },
     changeShowIcon(val) {
-      console.log(val)
+      // console.log(val)
       this.isShowIcon = val
     }
     /* 柱形图事件 end*/
@@ -240,6 +245,30 @@ export default {
   }
   .map {
     position: relative;
+    .map-content {
+      position: absolute;
+      bottom: 30px;
+      left: 20px;
+      height: 200px;
+      width: 200px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      .map1 {
+        position: relative;
+       
+      }
+      .point {
+        position:absolute;
+        top: 2px;
+        left: -24px;
+        margin-right: 10px;
+        height: 16px;
+        width: 16px;
+        background: rgb(34, 141, 202);
+      }
+      // border: 1px rgb(26, 205, 218) solid;
+    }
     .map-total {
       position: absolute;
       top: 50px;

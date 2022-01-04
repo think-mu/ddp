@@ -2,11 +2,11 @@
   <div class="main">
     <el-container class="main-content">
       <el-header>
-          <nav-header/>
+        <nav-header />
       </el-header>
       <el-container class="page">
         <el-aside class="page-aside">
-          <nav-menu/>
+          <nav-menu />
         </el-aside>
         <el-main class="page-content">
           <router-view></router-view>
@@ -31,13 +31,12 @@ export default {
     return {}
   },
   created() {
-
     this.getUserMenus()
   },
   methods: {
     getUserMenus() {
       // this.$store.commit('changeUserMenus', userMenus)
-      this.$store.dispatch('saveMenus',userMenus)
+      this.$store.dispatch('saveMenus', userMenus)
     }
   }
 }
@@ -54,22 +53,42 @@ export default {
 
 .main-content {
   height: 100%;
+  position: relative;
 }
 
 .page {
-  height: calc(100% - 90px);
-} 
-
-.el-header {
-  padding: 0;
-  background: url('../../assets/img/bgh.png');
-  height: 90px !important;
-  display: flex;
-  text-align: center;
-  align-items: center;
+  height: calc(100% - 86px);
 }
 
+.el-header {
+  // background: url('../../assets/img/bgh.png');
+  // height: 90px !important;
+  // display: flex;
+  // text-align: center;
+  // align-items: center;
+  // position: fixed;
+  // top: 0;
+  // left: 0;
+/*   width: 100%;
+  height: 86px !important;
+  min-width: 1000px;
+  z-index: -10;
+  zoom: 1;
+  background-color: #fff;
+  background: url(../../assets/img/bgh.png) no-repeat;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -o-background-size: cover;
+  background-position: center 0; */
+  padding: 0;
+  background-image: url(../../assets/img/bgh.png);
+  background-repeat:no-repeat;
+  background-size: 100% 100%;
+  height: 86px !important;
+  min-width: 1024px;
+  width: 100%;
 
+}
 
 .el-aside {
   width: 180px !important;
@@ -78,13 +97,10 @@ export default {
   line-height: 200px;
   text-align: left;
   cursor: pointer;
-  // background-color: #3e8fe6; //ui设计
-  background: linear-gradient(to top,#0f69ca, #d0f3ff) !important;
-
-  // background-color: #D7EFF8;
+  background: linear-gradient(to top, #0f69ca, #d0f3ff) !important;
   transition: width 0.3s linear;
-  scrollbar-width: none; /* firefox */
-  -ms-overflow-style: none; /* IE 10+ */
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
 
   &::-webkit-scrollbar {
     display: none;
@@ -97,5 +113,4 @@ export default {
   background-color: #f0f2f5;
   padding: 15px !important;
 }
-
 </style>

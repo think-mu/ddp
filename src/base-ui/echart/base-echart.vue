@@ -53,7 +53,7 @@ export default {
         // ])[0];
 					let handleIndex = Number(xIndex);
 					let seriesObj = echartInstance.getOption(); //图表object对象
-          console.log("handleIndex");
+          // console.log("handleIndex");
            that.$emit('pieClick',seriesObj,handleIndex)
        } 
         that.$emit('pieClick',params)

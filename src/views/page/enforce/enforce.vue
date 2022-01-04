@@ -2,13 +2,13 @@
   <div class="enforce">
         <el-row :gutter="20">
       <el-col :span="12">
-        <s-card title="监督执法" class="map">
+        <s-card title="监督执法统计" class="map">
           <map-echart height="615px" :mapData="mapData" mapName="enforce"></map-echart>
         </s-card>
       </el-col>
       <el-col :span="12" class="content-right">
         <s-card
-          title="监督执法"
+          title="药品违法案件情况"
         >
         <template v-slot:select>
           <el-select v-model="value" @change="pieSelect">
@@ -21,12 +21,13 @@
           </el-select>
         </template>
           <pie-echart
+            style="padding-left: 20%;"
             height="240px"
             :pieData="pieAllData"
           ></pie-echart>
         </s-card>
         <s-card
-          title="监督执法"
+          title="药品违法案件情况"
         >
         <template v-slot:select>
           <el-select v-model="valueBar" @change="barSelect">
@@ -157,7 +158,7 @@ import { levelData,convertData } from '@/utils/convert-data'
         })
       },
       getBarInfo(val) {
-        console.log(val);
+        // console.log(val);
         this.xData = this.mainData.map((item)=> {
           return {
               value: item.REGIONNAME

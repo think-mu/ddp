@@ -21,11 +21,11 @@ export default {
 
 <style scoped lang="less">
 .nav-header {
-  margin-left: 30px;
+  margin-left: 104px;
   display: flex;
   // flex-direction: row;
   // justify-content: flex-start;
-  text-align: center;
+  // text-align: center;
   align-items: center;
   height: 100%;
   width: 100%;
@@ -38,26 +38,28 @@ export default {
     flex: 1;
     // padding: 0 20px;
     height: 100%;
-    position: relative;
+    // position: relative;
     .crumbs {
-      position: absolute;
-      bottom: 5px;
-      left: 80px;
+      // position: absolute;
+      // bottom: 5px;
+      // left: 80px;
     }
     .title {
-      padding-bottom: 10px;
       padding-left: 0;
-      font-size: 30px;
-      font-weight: bolder;
+      font-size: 38px;
+      background-image:-webkit-linear-gradient(bottom,#83EAEB,#FFE9E9);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      font-family: 'headerTitleFont';
     }
     .info {
       padding-right: 20px;
     }
   }
   img {
-    width: 70px;
-    height: 70px;
-    margin-right: 20px;
+    width: 52px;
+    height: 52px;
+    margin-right: 11px;
   }
 }
 </style>

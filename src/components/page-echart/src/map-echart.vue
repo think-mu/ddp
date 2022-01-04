@@ -1,6 +1,10 @@
 <template>
   <div class="map-chart">
-    <base-echart :options="options" :height="height" :width="width"></base-echart>
+    <base-echart
+      :options="options"
+      :height="height"
+      :width="width"
+    ></base-echart>
   </div>
 </template>
 
@@ -25,7 +29,7 @@ export default {
       type: Array
     },
     mapName: {
-      type: String,
+      type: String
     }
   },
   data() {
@@ -42,47 +46,242 @@ export default {
           bottom: '4%',
           containLabel: true
         },
-        tooltip: {
-          trigger: 'item',
-          formatter: function(params) {
-            if(params.seriesName == "detail") {
-              return params.name + ' : ' + params.data.value[0] + '家'
-            }else if(params.seriesName == "category") {
-              return params.name + '</br>' +  'A级:' + params.data.value[0].A +
-                    '</br>' +'B级:' + params.data.value[0].B+
-                    '</br>' +'C级:' + params.data.value[0].C+
-                    '</br>' +'D级:' + params.data.value[0].D+
-                    '</br>' +'未评级:' + params.data.value[0]['未评级']
+        // geo: {
+        //   roam: false,
+        //   map: 'gz',
+        //   center: [113.505367, 23.22559],
+        //   aspectScale: 1,
+        //   zoom: 1.2,
+        //   show: true,
+        //   label: {
+        //     normal: {
+        //       show: false
+        //     },
+        //     emphasis: {
+        //       show: false,
+        //     }
+        //   },
+        //   itemStyle: {
+        //     normal: {
+        //       areaColor: '#3a7fd5',
+        //       borderColor: '#0a53e9', //线
+        //       shadowColor: '#092f8f', //外发光
+        //       shadowBlur: 20
+        //     },
+        //     emphasis: {
+        //       areaColor: '#0a2dae' //悬浮区背景
+        //     }
+        //   },
 
-            }else if(params.seriesName == "review") {
+        //   // emphasis: {
+        //   //   borderColor: 'rgb(9, 54, 95)',
+        //   //   label: {
+        //   //     color: '#fff'
+        //   //   }
+        //   // },
+
+        //   regions: [
+        //     //对不同的区块进行着色
+        //     {
+        //       name: '番禺区',
+        //       itemStyle: {
+        //         areaColor: '#5CD89E'
+        //       }
+        //     },
+        //     {
+        //       name: '荔湾区',
+        //       itemStyle: {
+        //         areaColor: '#FCCF73'
+        //       }
+        //     }
+        //   ]
+        // },
+        // geo: {
+        //   map: 'gz',
+        //   show: true,
+        //   roam: false,
+        //   aspectScale: 1,
+        //   zoom: 1.2,
+        //   label: {
+        //     show:false,
+        //     normal: {
+        //       show: false
+        //     },
+        //     emphasis: {
+        //       show: false
+        //     }
+        //   },
+
+        //   itemStyle: {
+        //     normal: {
+        //       areaColor: '#3a7fd5',
+        //       borderColor: '#0a53e9', //线
+        //       shadowColor: '#092f8f', //外发光
+        //       shadowBlur: 20
+        //     },
+        //     emphasis: {
+        //       areaColor: '#0a2dae' //悬浮区背景
+        //     }
+        //   }
+        // },
+        tooltip: {
+          show: true,
+          trigger: 'item',
+          formatter: function (params) {
+            console.log(params, 'params')
+            if (params.seriesName == 'detail') {
+              return params.name + ' : ' + params.data.value[0] + '家'
+            } else if (params.seriesName == 'category') {
+              return (
+                params.name +
+                '</br>' +
+                'A级:' +
+                params.data.value[0].A +
+                '</br>' +
+                'B级:' +
+                params.data.value[0].B +
+                '</br>' +
+                'C级:' +
+                params.data.value[0].C +
+                '</br>' +
+                'D级:' +
+                params.data.value[0].D +
+                '</br>' +
+                '未评级:' +
+                params.data.value[0]['未评级']
+              )
+            } else if (params.seriesName == 'review') {
               // console.log(params,"review");
-              return params.name + '</br>' +  '出动人次:' + params.data.value[0].CDRC +
-                    '</br>' +'需整改数量:' + params.data.value[0].XYZG+
-                    '</br>' +'已整改数量:' + params.data.value[0].YZGCNUM+
-                    '</br>' +'检查数量:' + params.data.value[0].CHECKNUM+
-                    '</br>' +'检查覆盖率:' + params.data.value[0].FGL
-            }else if(params.seriesName == "review1") {
-              return params.name + '</br>' +  '计划数:' + params.data.value[0].PLANNUM +
-                    '</br>' +'检查数:' + params.data.value[0].YJC+
-                    '</br>' +'待复核检查数:' + params.data.value[0].DFH+
-                    '</br>' +'未检查数:' + params.data.value[0].WJC+
-                    '</br>' +'符合数:' + params.data.value[0].FH+
-                    '</br>' +'限期整改:' + params.data.value[0].XQZG+
-                    '</br>' +'复核检查数:' + params.data.value[0].FHJC+
-                    '</br>' +'严重违反:' + params.data.value[0].YZWF+
-                    '</br>' +'停业:' + params.data.value[0].TY+
-                    '</br>' +'完成百分比:' + params.data.value[0].WCBFB
-            }else if(params.seriesName == "enforce") {
+              return (
+                params.name +
+                '</br>' +
+                '出动人次:' +
+                params.data.value[0].CDRC +
+                '</br>' +
+                '需整改数量:' +
+                params.data.value[0].XYZG +
+                '</br>' +
+                '已整改数量:' +
+                params.data.value[0].YZGCNUM +
+                '</br>' +
+                '检查数量:' +
+                params.data.value[0].CHECKNUM +
+                '</br>' +
+                '检查覆盖率:' +
+                params.data.value[0].FGL
+              )
+            } else if (params.seriesName == 'review1') {
+              return (
+                params.name +
+                '</br>' +
+                '计划数:' +
+                params.data.value[0].PLANNUM +
+                '</br>' +
+                '检查数:' +
+                params.data.value[0].YJC +
+                '</br>' +
+                '待复核检查数:' +
+                params.data.value[0].DFH +
+                '</br>' +
+                '未检查数:' +
+                params.data.value[0].WJC +
+                '</br>' +
+                '符合数:' +
+                params.data.value[0].FH +
+                '</br>' +
+                '限期整改:' +
+                params.data.value[0].XQZG +
+                '</br>' +
+                '复核检查数:' +
+                params.data.value[0].FHJC +
+                '</br>' +
+                '严重违反:' +
+                params.data.value[0].YZWF +
+                '</br>' +
+                '停业:' +
+                params.data.value[0].TY +
+                '</br>' +
+                '完成百分比:' +
+                params.data.value[0].WCBFB
+              )
+            } else if (params.seriesName == 'enforce') {
               // console.log(params);
-              return params.name + '</br>' +  '处置数:' + params.data.value[0].CZNUM +
-                    '</br>' +'立案数:' + params.data.value[0].LANUM+
-                    '</br>' +'移送数:' + params.data.value[0].YSNUM
+              return (
+                params.name +
+                '</br>' +
+                '处置数:' +
+                params.data.value[0].CZNUM +
+                '</br>' +
+                '立案数:' +
+                params.data.value[0].LANUM +
+                '</br>' +
+                '移送数:' +
+                params.data.value[0].YSNUM
+              )
             }
           }
-         
         },
+
         series: [
-          
+          {
+            symbolSize: 5,
+            label: {
+              normal: {
+                formatter: '{b}',
+                position: 'left',
+                show: true,
+                color: '#fff'
+              },
+              emphasis: {
+                show: true
+              }
+            },
+
+            itemStyle: {
+              normal: {
+                color: '#fff'
+              }
+            },
+            name: this.mapName,
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            data: convertData(this.mapData)
+          },
+          // {
+          //   type: 'map',
+          //   roam: false,
+          //   map: 'gz',
+          //   center: [113.505367, 23.22559],
+          //   aspectScale: 1,
+          //   zoom: 1.2,
+          //   data: convertData(this.mapData),
+          //   name: this.mapName,
+
+          //   showLegendSymbol: false, // 存在legend时显示
+          //   label: {
+          //     normal: {
+          //       show: false
+          //     },
+          //     emphasis: {
+          //       show: false,
+          //       textStyle: {
+          //         color: '#fff'
+          //       }
+          //     }
+          //   },
+          //   roam: false,
+          //   itemStyle: {
+          //     normal: {
+          //       areaColor: '#031525',
+          //       borderColor: '#FFFFFF'
+          //     },
+          //     emphasis: {
+          //       areaColor: '#2B91B7'
+          //     }
+          //   },
+          //   animation: false,
+          //   data: convertData(this.mapData)
+          // },
           {
             type: 'map',
             roam: false,
@@ -93,36 +292,56 @@ export default {
             data: convertData(this.mapData),
             showLegendSymbol: true,
             name: this.mapName,
-        
+
             label: {
               show: true,
               color: '#fff',
               fontSize: 14,
               // formatter: '{b}: {@value.data[2]}',
-              formatter:function (params) {
+              formatter: function (params) {
                 // console.log(params);
-                if(params.seriesName == "detail") {
-                  return params.name + ' : ' + params.data.value[0] + '家'
-                }else if(params.seriesName == "category") {
-                  return params.name 
-                }else if(params.seriesName == "review") {
+                if (params.seriesName == 'detail') {
+                  return   params.data.value[0] + '家'+'\n' +params.name 
+                } else if (params.seriesName == 'category') {
+                  return params.name
+                } else if (params.seriesName == 'review') {
                   // console.log(params,"review2");
-                  // return params.name 
+                  // return params.name
                 }
               }
             },
-            itemStyle: {
-              areaColor: '#0E4287',
-              borderColor: '#0378DA'
-            },
+            //   itemStyle: {
+            //     normal: {
+            //       areaColor: '#031525',
+            //       borderColor: '#FFFFFF'
+            //     },
+            //     emphasis: {
+            //       areaColor: '#2B91B7'
+            //     }
+            //   },
 
-            emphasis: {
-              label: {
-                color: '#000'
+            itemStyle: {
+              normal: {
+                areaColor: '#3a7fd5',
+                borderColor: '#0a53e9', //线
+                shadowColor: '#092f8f', //外发光
+                shadowBlur: 20
+              },
+              emphasis: {
+                label: {
+                  color: '#fff'
+                },
+                areaColor: '#0a2dae' //悬浮区背景
               }
             }
-          },
-          
+          }
+          /* {
+            name: this.mapName,
+            type: 'map',
+            map: 'gz',
+            geoIndex: 0,
+            data: convertData(this.mapData)
+          }, */
         ]
       }
     }

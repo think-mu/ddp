@@ -186,7 +186,7 @@ import { levelData,convertData } from '@/utils/convert-data'
       /* 饼形图事件 start*/
       //全市分级饼形图--点击事件
       pieClick(param) {
-        console.log(param,"并行");
+        // console.log(param,"并行");
         this.getPieAraeData(param.name)
         this.pieTitle2 = '各辖区'+param.name + '药品企业数量'
         
@@ -197,10 +197,10 @@ import { levelData,convertData } from '@/utils/convert-data'
       barClick(param) {
         this.getBarAraeData(param.name)
         this.isShowIcon = true
-        console.log(param, '柱形图')
+        // console.log(param, '柱形图')
       },
       changeShowIcon(val) {
-        console.log(val)
+        // console.log(val)
         this.isShowIcon = val
       }
       /* 柱形图事件 end*/
