@@ -1,10 +1,15 @@
 <template>
   <div class="bar-chart">
-    <base-echart :options="options" :height="height" @pieClick="barClick"></base-echart>
+    <base-echart
+      :options="options"
+      :height="height"
+      @pieClick="barClick"
+    ></base-echart>
   </div>
 </template>
 
 <script>
+import * as echarts from 'echarts'
 import BaseEchart from '@/base-ui/echart/base-echart'
 export default {
   name: '',
@@ -37,47 +42,108 @@ export default {
     return {
       optionLabel: {
         show: true,
-        color: '#000',
+        color: '#fff',
         fontSize: 14,
-        position: "top",
+        position: 'top',
         formatter: function (params) {
-          // console.log(params,"000");
-          // return params.value
+          // return params.value + '家'
         }
       },
+      optionItemStyle(color1,color2) {
+        return {
+          normal: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: color1
+              },
+              {
+                offset: 1,
+                color: color2
+              }
+            ]),
+            barBorderRadius: 6
+          }
+        }
+      }
     }
   },
   mounted() {},
   computed: {
     options() {
-      
       return {
-        legend: {},
-        tooltip: {},
-        grid: {  
-          bottom:'20%'  
-        },  
+        legend: {
+          // left: 'right',
+          right: '10%',
+          icon: "circle",
+          textStyle: {
+            color: '#fff',
+            fontSize: 16,
+            fontWeight: 'normal'
+          },
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: { // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        grid: {
+          bottom: '20%'
+        },
         dataset: {
           dimensions: this.dimensions,
           source: this.source
         },
-        xAxis: { 
-          type: 'category' ,
-          axisLabel: {  
-            interval:0,  
-            rotate:30  
-          }  
+        xAxis: {
+          type: 'category',
+          // axisLabel: {
+          //   interval: 0,
+          //   rotate: 30
+          // },
+          axisTick: {
+            show: false
+          },
+          axisLine: {
+            show: false,
+            lineStyle: {
+              color: '#fff'
+            }
+          },
+          axisLabel: {
+            fontSize: 14
+          }
         },
-        yAxis: {},
+        yAxis: {
+          axisLine: {
+            show: false,
+            lineStyle: {
+              color: '#fff'
+            }
+          },
+          splitLine: {
+            show: false,
+            lineStyle: {
+              color: 'rgba(255,255,255,.3)'
+            }
+          },
+          axisLabel: {
+            fontSize: 14
+          }
+        },
         // Declare several bar series, each will be mapped
         // to a column of dataset.source by default.
-        series: [{ type: 'bar',label: this.optionLabel }, { type: 'bar',label: this.optionLabel }, { type: 'bar',label: this.optionLabel }]
-      };
+        series: [
+          { type: 'bar', barWidth: '20', label: this.optionLabel, itemStyle: this.optionItemStyle('rgba(17,117,253, 0.6)','#01ADEA') },
+          { type: 'bar', barWidth: '20', label: this.optionLabel, itemStyle: this.optionItemStyle('rgba(245,130,75, 0.6)','#FCC70A') },
+          { type: 'bar', barWidth: '20', label: this.optionLabel, itemStyle: this.optionItemStyle('rgba(0,106,117, 0.6)','#83D372') }
+        ]
+      }
     }
   },
   methods: {
-    barClick(param){
-      this.$emit('barClick',param)
+    barClick(param) {
+      this.$emit('barClick', param)
     }
   }
 }

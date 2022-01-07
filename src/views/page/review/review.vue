@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <!-- <s-card title="tie" class="map"></s-card> -->
 
-      <el-col :span="14">
+      <el-col :span="12">
         <div class="board">
           <div class="board-btn">
             <!-- <el-button round v-for="(item,index) in btnName" :key="index">{{item}}</el-button> -->
@@ -32,15 +32,15 @@
         <s-card title="全市监督检查情况" class="map">
           <!-- width="60%" -->
           <map-echart
-            height="475px"
+            height="605px"
             width="100%"
             :mapData="mapData"
             :mapName="mapItem"
           ></map-echart>
         </s-card>
       </el-col>
-      <el-col :span="10" class="content-right">
-        <s-card title="监督检查情况">
+      <el-col :span="12" class="content-right">
+        <s-card title="监督检查情况" class="content-right-pie">
           <template v-slot:select v-if="false">
             <el-form
               :inline="true"
@@ -66,14 +66,14 @@
             </el-form>
           </template>
           <line-echart
-            height="240px"
+            height="325px"
             :xLineData="xLineData"
             :LineData="LineData"
             @pieClick="pieClick"
             v-if="isShowFri"
           ></line-echart>
           <mix-echart
-            height="240px"
+            height="325px"
             @pieClick="pieClick"
             :mixXdata="mixXdata"
             :mixLineData="mixLineData"
@@ -81,7 +81,7 @@
             v-if="isShowSec"
           ></mix-echart>
           <stack-echart
-            height="240px"
+            height="325px"
             @pieClick="pieClick"
             :stackData="stackData"
             v-if="isShowThi"
@@ -100,14 +100,14 @@
             v-show="!isShowIcon"
           ></bar-echart> -->
           <multi-bar-echart
-            height="280px"
+            height="325px"
             :source="source"
             :dimensions="dimensions"
             @barClick="barClick"
             v-if="isShowFri"
           ></multi-bar-echart>
           <multi-bar-echart
-            height="280px"
+            height="325px"
             :source="source"
             :dimensions="dimensions"
             @barClick="barClick"
@@ -115,7 +115,7 @@
           ></multi-bar-echart>
 
           <stack-simple-echart
-            height="280px"
+            height="325px"
             @pieClick="pieClick"
             :stackData="stackSimpleData"
             v-if="isShowThi"
@@ -583,8 +583,8 @@ export default {
       flex-direction: row;
    
     }
-    .el-card:last-child {
-      margin-top: 15px;
+    &-pie {
+      margin-bottom: 15px;
     }
   }
 }

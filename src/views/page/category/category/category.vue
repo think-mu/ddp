@@ -1,25 +1,25 @@
 <template>
   <div class="category">
         <el-row :gutter="20">
-      <el-col :span="12">
+      <el-col :span="11">
         <s-card title="药品企业信用分级" class="map">
-          <map-echart height="615px" :mapData="mapData" mapName="category"></map-echart>
+          <map-echart height="750px" :mapData="mapData" mapName="category"></map-echart>
         </s-card>
       </el-col>
-      <el-col :span="12" class="content-right">
+      <el-col :span="13" class="content-right">
         <s-card
           title="企业信用分级"
           class="content-right-pie"
           flex="flex"
         >
           <pie-echart
-            height="240px"
+            height="325px"
             :pieData="pieAllData"
             :pieTitle="pieTitle1"
             @pieClick="pieClick"
           ></pie-echart>
           <pie-echart
-            height="240px"
+            height="325px"
             :pieData="pieAreaData"
             :pieTitle="pieTitle2"
           ></pie-echart>
@@ -30,14 +30,14 @@
           @changeShowIcon="changeShowIcon"
         >
           <bar-echart
-            height="280px"
+            height="325px"
             :xData="xData"
             :yData="yData"
             @barClick="barClick"
             v-show="!isShowIcon"
           ></bar-echart>
           <bar-echart
-            height="280px"
+            height="325px"
             :xData="xData1"
             :yData="yData1"
             v-if="isShowIcon"
@@ -219,8 +219,8 @@ import { levelData,convertData } from '@/utils/convert-data'
     height: 100%;
     display: flex;
     flex-direction: column;
-    .el-card:last-child {
-      margin-top: 15px;
+    &-pie {
+      margin-bottom: 15px;
     }
   }
 }

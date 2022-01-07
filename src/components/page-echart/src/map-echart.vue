@@ -46,84 +46,48 @@ export default {
           bottom: '4%',
           containLabel: true
         },
-        // geo: {
-        //   roam: false,
-        //   map: 'gz',
-        //   center: [113.505367, 23.22559],
-        //   aspectScale: 1,
-        //   zoom: 1.2,
-        //   show: true,
-        //   label: {
-        //     normal: {
-        //       show: false
-        //     },
-        //     emphasis: {
-        //       show: false,
-        //     }
-        //   },
-        //   itemStyle: {
-        //     normal: {
-        //       areaColor: '#3a7fd5',
-        //       borderColor: '#0a53e9', //线
-        //       shadowColor: '#092f8f', //外发光
-        //       shadowBlur: 20
-        //     },
-        //     emphasis: {
-        //       areaColor: '#0a2dae' //悬浮区背景
-        //     }
-        //   },
+        geo: {
+          tooltip: {
+            show: false
+          },
+          label: {
+            show: false
+          },
+          select: {
+            label: {
+              show: false
+            }
+          },
+          map: 'gz',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          top: 0,
+          
+          aspectScale: 1,
+          layoutCenter: ['50%', '52.5%'], //地图位置
+          layoutSize: '90%',
+          emphasis: {
+            label: {
+              show: false
+            }
+          },
+          itemStyle: {
+            normal: {
+              shadowColor: 'rgba(0,228,242,0.5)',
+              shadowBlur: 2,
+              // color: 'rgba(21,190,245,.6)',
+              color: 'rgba(19,106,182,.9)'
+              // shadowOffsetX: 10,
+              // shadowOffsetY: 11
+            },
+            emphasis: {
+              areaColor: 'rgba(21,190,245,.6)'
+            }
+          },
+          z: 2
+        },
 
-        //   // emphasis: {
-        //   //   borderColor: 'rgb(9, 54, 95)',
-        //   //   label: {
-        //   //     color: '#fff'
-        //   //   }
-        //   // },
-
-        //   regions: [
-        //     //对不同的区块进行着色
-        //     {
-        //       name: '番禺区',
-        //       itemStyle: {
-        //         areaColor: '#5CD89E'
-        //       }
-        //     },
-        //     {
-        //       name: '荔湾区',
-        //       itemStyle: {
-        //         areaColor: '#FCCF73'
-        //       }
-        //     }
-        //   ]
-        // },
-        // geo: {
-        //   map: 'gz',
-        //   show: true,
-        //   roam: false,
-        //   aspectScale: 1,
-        //   zoom: 1.2,
-        //   label: {
-        //     show:false,
-        //     normal: {
-        //       show: false
-        //     },
-        //     emphasis: {
-        //       show: false
-        //     }
-        //   },
-
-        //   itemStyle: {
-        //     normal: {
-        //       areaColor: '#3a7fd5',
-        //       borderColor: '#0a53e9', //线
-        //       shadowColor: '#092f8f', //外发光
-        //       shadowBlur: 20
-        //     },
-        //     emphasis: {
-        //       areaColor: '#0a2dae' //悬浮区背景
-        //     }
-        //   }
-        // },
         tooltip: {
           show: true,
           trigger: 'item',
@@ -224,7 +188,9 @@ export default {
 
         series: [
           {
+            zlevel: 2,
             symbolSize: 5,
+            geoIndex: 0,
             label: {
               normal: {
                 formatter: '{b}',
@@ -239,7 +205,8 @@ export default {
 
             itemStyle: {
               normal: {
-                color: '#fff'
+                color: '#fff',
+
               }
             },
             name: this.mapName,
@@ -247,52 +214,18 @@ export default {
             coordinateSystem: 'geo',
             data: convertData(this.mapData)
           },
-          // {
-          //   type: 'map',
-          //   roam: false,
-          //   map: 'gz',
-          //   center: [113.505367, 23.22559],
-          //   aspectScale: 1,
-          //   zoom: 1.2,
-          //   data: convertData(this.mapData),
-          //   name: this.mapName,
-
-          //   showLegendSymbol: false, // 存在legend时显示
-          //   label: {
-          //     normal: {
-          //       show: false
-          //     },
-          //     emphasis: {
-          //       show: false,
-          //       textStyle: {
-          //         color: '#fff'
-          //       }
-          //     }
-          //   },
-          //   roam: false,
-          //   itemStyle: {
-          //     normal: {
-          //       areaColor: '#031525',
-          //       borderColor: '#FFFFFF'
-          //     },
-          //     emphasis: {
-          //       areaColor: '#2B91B7'
-          //     }
-          //   },
-          //   animation: false,
-          //   data: convertData(this.mapData)
-          // },
           {
             type: 'map',
             roam: false,
             map: 'gz',
             center: [113.505367, 23.22559],
             aspectScale: 1,
-            zoom: 1.2,
+            zoom: 1.1,
+            selectedMode: false,
             data: convertData(this.mapData),
             showLegendSymbol: true,
             name: this.mapName,
-
+            zlevel: 2,
             label: {
               show: true,
               color: '#fff',
@@ -301,7 +234,7 @@ export default {
               formatter: function (params) {
                 // console.log(params);
                 if (params.seriesName == 'detail') {
-                  return   params.data.value[0] + '家'+'\n' +params.name 
+                  return params.data.value[0] + '家' + '\n' + params.name
                 } else if (params.seriesName == 'category') {
                   return params.name
                 } else if (params.seriesName == 'review') {
@@ -322,18 +255,20 @@ export default {
 
             itemStyle: {
               normal: {
-                areaColor: '#3a7fd5',
-                borderColor: '#0a53e9', //线
-                shadowColor: '#092f8f', //外发光
-                shadowBlur: 20
+                areaColor: 'rgba(19,106,182,.9)',
+                borderColor: '#fff', //线
+                // shadowColor: '#B1DEF6', //外发光
+                // shadowBlur: 10,
+
               },
               emphasis: {
                 label: {
                   color: '#fff'
                 },
-                areaColor: '#0a2dae' //悬浮区背景
+                areaColor: '#177AD1' //悬浮区背景
               }
-            }
+            },
+            
           }
           /* {
             name: this.mapName,

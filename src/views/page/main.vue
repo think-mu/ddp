@@ -85,22 +85,28 @@ export default {
   background-repeat:no-repeat;
   background-size: 100% 100%;
   height: 86px !important;
-  min-width: 1024px;
+  // min-width: 1024px;
   width: 100%;
 
 }
 
 .el-aside {
-  width: 180px !important;
+  width: 217px !important;
   overflow-x: hidden;
   overflow-y: auto;
   line-height: 200px;
   text-align: left;
   cursor: pointer;
-  background: linear-gradient(to top, #0f69ca, #d0f3ff) !important;
-  transition: width 0.3s linear;
-  scrollbar-width: none; 
-  -ms-overflow-style: none; 
+  // background: linear-gradient(to top, #0f69ca, #d0f3ff) !important;
+  background-image: url(../../assets/img/bgs.png);
+  background-repeat:no-repeat;
+  background-size: 100% 100%;
+  // height: 86px !important;
+  // min-width: 1024px;
+  // width: 100%;
+  // transition: width 0.3s linear;
+  // scrollbar-width: none; 
+  // -ms-overflow-style: none; 
 
   &::-webkit-scrollbar {
     display: none;
@@ -110,7 +116,14 @@ export default {
 .el-main {
   color: #333;
   text-align: center;
-  background-color: #f0f2f5;
+  // background-color: #f0f2f5;
   padding: 15px !important;
+  background-image: url(../../assets/img/bgc.png);
+  background-repeat:no-repeat;
+  background-size: 100% 100%;
+  // height: 86px !important;
+  min-width: 1024px;
+  width: 100%;
+  height: 100%;
 }
 </style>

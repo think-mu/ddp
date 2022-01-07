@@ -1,16 +1,20 @@
 <template>
+<div class="border">
   <el-card class="box-card">
-    <template #header>
-      <div class="card-header">
-        <span>{{ title }}</span>
-        <slot name='select'></slot>
-        <i class="el-icon-refresh-left" v-if="isShowIcon" @click="changeShowIcon"></i>
+      <template #header>
+        <div class="card-header">
+          <span class="card-header-title"><img src="~@/assets/img/card/card-icon.png" alt="">{{ title }}</span>
+          <slot name='select'></slot>
+          <i class="el-icon-refresh-left" v-if="isShowIcon" @click="changeShowIcon"></i>
+          <img class="card-header-line" src="~@/assets/img/card/card-line.png" alt="">
+        </div>
+      </template>
+      <div class="item" :style="{ display : flex}">
+        <slot></slot>
       </div>
-    </template>
-    <div class="item" :style="{ display : flex}">
-      <slot></slot>
-    </div>
+      <div class="card-footer"></div>
   </el-card>
+  </div>
 </template>
 
 <script>
@@ -42,16 +46,76 @@ export default {
 </script>
 
 <style scoped lang="less">
+.border {
+  position: relative;
+}
 .box-card {
-  // background-color: #D7EFF8; //ui设计
-  background: linear-gradient(to right,#b5dcf7, #e3eff3) !important;
-  
+  background-color: #d7eff800; 
+  border: 1px solid #00748D;
+  border-radius: 5px;
+  color: #FFAE00;
+  font-size: 20px;
   /deep/ .el-card__header {
     padding: 10px 20px !important;
-    border-bottom: 1px solid #ffffff;  //ui设计
+    border-bottom: none;
+    
+    // border-bottom: 5px dashed #ffffff;  //ui设计
   }
   /deep/ .el-card__body {
-    padding: 10px !important;
+    padding: 0px !important;
+  }
+  
+
+  // 边框角样式
+  &::before {
+    position:absolute;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    border-top-left-radius: 5px;
+    border-left: 3px solid #00C0FF;
+    border-top: 3px solid #00C0FF;
+    content: "";
+  }
+  &::after {
+    position:absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    border-top-right-radius: 5px;
+    border-right: 3px solid #00C0FF;
+    border-top: 3px solid #00C0FF;
+    content: "";
+  }
+  .card-footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    &::before {
+    position:absolute;
+    bottom: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    border-bottom-left-radius: 5px;
+    border-left: 3px solid #00C0FF;
+    border-bottom: 3px solid #00C0FF;
+    content: "";
+    }
+    &::after {
+      position:absolute;
+      bottom: 0;
+      right: 0;
+      width: 8px;
+      height: 8px;
+      border-bottom-right-radius: 5px;
+      border-right: 3px solid #00C0FF;
+      border-bottom: 3px solid #00C0FF;
+      content: "";
+    }
   }
 }
 
@@ -59,11 +123,26 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 30px;
+  height: 60px;
+  position: relative;
+  &-title {
+    margin-left: 16px;
+    margin-bottom: 5px;
+    img {
+      margin-right: 15px;
+    }
+  }
+  &-line { 
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    left: 0;
+    bottom: 0px;
+  }
 }
 
 .item {
-  margin-bottom: 10px;
+  // margin-bottom: 10px;
   // display: flex;
   // flex: 1;
   // justify-content: space-between;

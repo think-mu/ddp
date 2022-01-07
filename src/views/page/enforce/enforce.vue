@@ -1,14 +1,15 @@
 <template>
   <div class="enforce">
         <el-row :gutter="20">
-      <el-col :span="12">
+      <el-col :span="11">
         <s-card title="监督执法统计" class="map">
-          <map-echart height="615px" :mapData="mapData" mapName="enforce"></map-echart>
+          <map-echart height="750px" :mapData="mapData" mapName="enforce"></map-echart>
         </s-card>
       </el-col>
-      <el-col :span="12" class="content-right">
+      <el-col :span="13" class="content-right">
         <s-card
           title="药品违法案件情况"
+          class="content-right-pie"
         >
         <template v-slot:select>
           <el-select v-model="value" @change="pieSelect">
@@ -22,7 +23,7 @@
         </template>
           <pie-echart
             style="padding-left: 20%;"
-            height="240px"
+            height="325px"
             :pieData="pieAllData"
           ></pie-echart>
         </s-card>
@@ -47,7 +48,7 @@
             v-show="!isShowIcon"
           ></bar-echart>-->
           <bar-echart
-            height="280px"
+            height="325px"
             :xData="xData"
             :yData="yData"
           ></bar-echart> 
@@ -207,8 +208,8 @@ import { levelData,convertData } from '@/utils/convert-data'
     height: 100%;
     display: flex;
     flex-direction: column;
-    .el-card:last-child {
-      margin-top: 15px;
+    &-pie {
+      margin-bottom: 15px;
     }
   }
 }

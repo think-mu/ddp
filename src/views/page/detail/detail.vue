@@ -1,7 +1,7 @@
 <template>
   <div class="detail">
     <el-row :gutter="20">
-      <el-col :span="12">
+      <el-col :span="11">
         <s-card title="药品企业数量" class="map">
           <div class="map-total">
             <div class="map-total-hd">
@@ -11,30 +11,23 @@
               </ul>
             </div>
           </div>
-          <!-- <div class="map-content">
-             <div class="map1"><div class="point"></div> 花都区：1481家</div>
-             <div class="map1"><div class="point"></div> 花都区：1481家</div>
-             <div class="map1"><div class="point"></div> 花都区：1481家</div>
-             <div class="map1"><div class="point"></div> 花都区：1481家</div>
-
-          </div> -->
-          <map-echart height="615px" :mapData="mapData" mapName="detail"></map-echart>
+          <map-echart height="750px" :mapData="mapData" mapName="detail"></map-echart>
         </s-card>
       </el-col>
-      <el-col :span="12" class="content-right">
+      <el-col :span="13" class="content-right">
         <s-card
           title="各类型药品企业数量"
           class="content-right-pie"
           flex="flex"
         >
           <pie-echart
-            height="240px"
+            height="325px"
             :pieData="pieAllData"
             :pieTitle="pieTitle1"
             @pieClick="pieClick"
           ></pie-echart>
           <pie-echart
-            height="240px"
+            height="325px"
             :pieData="pieAreaData"
             :pieTitle="pieTitle2"
           ></pie-echart>
@@ -45,14 +38,14 @@
           @changeShowIcon="changeShowIcon"
         >
           <bar-echart
-            height="280px"
+            height="325px"
             :xData="xData"
             :yData="yData"
             @barClick="barClick"
             v-show="!isShowIcon"
           ></bar-echart>
           <bar-echart
-            height="280px"
+            height="325px"
             :xData="xData1"
             :yData="yData1"
             v-if="isShowIcon"
@@ -271,7 +264,7 @@ export default {
     }
     .map-total {
       position: absolute;
-      top: 50px;
+      top: 70px;
       left: 0px;
       // height: 100px;
       
@@ -279,20 +272,34 @@ export default {
       &-hd {
         ul {
           display: flex;
-          width: 350px;
+          width: 260px;
           li {
             flex: 1;
             list-style-type: none;
             display: flex;
             flex-direction: column;
+            justify-content: space-evenly;
             text-align: center;
+            height: 113px;
+            background: url('../../../assets/img/total-icon.png') no-repeat center top;
           }
           span:first-child {
             font-family: 'electronicFont';
-            line-height: 50px;
+            line-height: 40px;
             font-size: 40px;
-            color: #02a6b5;
-            
+            margin-top: 10px;
+            // color: #faa60b;
+            background-image:-webkit-linear-gradient(bottom,#FF7200,#FFEE30);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+          }
+          span:last-child {
+            font-family: 'electronicFont';
+            line-height: 18px;
+            font-size: 18px;
+            color: #e5f0f1;
+            text-shadow:2px 2px 8px #aaf2ff;
+            margin-top: 30px;
           }
           
         }
@@ -305,8 +312,9 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  .el-card:last-child {
-    margin-top: 15px;
+  &-pie {
+    margin-bottom: 15px;
   }
+
 }
 </style>

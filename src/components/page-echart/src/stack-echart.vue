@@ -10,6 +10,8 @@
 
 <script>
 import BaseEchart from '@/base-ui/echart/base-echart'
+import * as echarts from 'echarts'
+
 export default {
   name: '',
   components: {
@@ -26,10 +28,26 @@ export default {
     },
     stackData: {
       type: Array
-    },
+    }
   },
   data() {
-    return {}
+    return {
+      optionItemStyle(color1, color2) {
+        return {
+          barBorderRadius: 20,
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: color1
+            },
+            {
+              offset: 1,
+              color: color2
+            }
+          ])
+        }
+      }
+    }
   },
   mounted() {},
   computed: {
@@ -41,7 +59,15 @@ export default {
             type: 'shadow'
           }
         },
-        legend: {},
+        legend: {
+          icon: 'circle',
+          right: '6%',
+          textStyle: {
+            color: '#fff',
+            fontSize: 16,
+            fontWeight: 'normal'
+          }
+        },
         grid: {
           left: '3%',
           right: '4%',
@@ -51,35 +77,48 @@ export default {
         xAxis: [
           {
             type: 'category',
-            data: this.stackData.REGIONNAME
+            data: this.stackData.REGIONNAME,
+            axisTick: {
+              show: false
+            },
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: '#fff'
+              }
+            },
+            axisLabel: {
+              fontSize: 14
+            }
           }
         ],
         yAxis: [
           {
-            type: 'value'
+            type: 'value',
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: '#fff'
+              }
+            },
+            splitLine: {
+              show: false,
+              lineStyle: {
+                color: 'rgba(255,255,255,.3)'
+              }
+            },
+            axisLabel: {
+              fontSize: 14
+            }
           }
         ],
         series: [
-          // {
-          //   name: 'Search Engine',
-          //   type: 'bar',
-          //   barWidth: 20,
-          //   data: [862, 1018, 964, 1026, 1679, 1600, 1570],
-          //   emphasis: {
-          //     focus: 'series'
-          //   },
-          //   markLine: {
-          //     lineStyle: {
-          //       type: 'dashed'
-          //     }
-          //     // data: [[{ type: 'min' }, { type: 'max' }]]
-          //   }
-          // },
           {
             name: '符合',
             type: 'bar',
-            barWidth: 20,
+            barWidth: 16,
             stack: 'Search Engine',
+            itemStyle: this.optionItemStyle('rgba(55,255,249,1)','rgba(0,222,215,0.5)'),
             emphasis: {
               focus: 'series'
             },
@@ -92,6 +131,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
+            itemStyle: this.optionItemStyle('rgba(255,252,0,1)','rgba(255, 251, 0, 0.522)'),
             data: this.stackData.XQZG
           },
           {
@@ -101,6 +141,8 @@ export default {
             emphasis: {
               focus: 'series'
             },
+            itemStyle: this.optionItemStyle('rgb(170,191,255)','rgba(170,191,255,.5)'),
+
             data: this.stackData.FHJC
           },
           {
@@ -110,6 +152,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
+            itemStyle: this.optionItemStyle('rgb(255,148,136)','rgba(255,148,136,.5)'),
             data: this.stackData.YZWF
           },
           {
@@ -119,6 +162,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
+            itemStyle: this.optionItemStyle('rgb(255,105,0)','rgba(255,105,0,.5)'),
             data: this.stackData.TY
           }
         ]
