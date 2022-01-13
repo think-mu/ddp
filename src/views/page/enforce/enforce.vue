@@ -12,7 +12,7 @@
           class="content-right-pie"
         >
         <template v-slot:select>
-          <el-select v-model="value" @change="pieSelect">
+          <el-select v-model="value" @change="pieSelect" class="content-select" :popper-append-to-body="false" >
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -31,7 +31,7 @@
           title="药品违法案件情况"
         >
         <template v-slot:select>
-          <el-select v-model="valueBar" @change="barSelect">
+          <el-select v-model="valueBar" @change="barSelect" :popper-append-to-body="false"> 
             <el-option
               v-for="item in optionsBar"
               :key="item.value"
@@ -79,13 +79,7 @@ import { levelData,convertData } from '@/utils/convert-data'
       return {
         mapData: [],
         pieAllData: [],
-        pieAreaData: [
-          {value: 100, name: "番禺区"},
-          {value: 100, name: "荔湾区"},
-          {value: 100, name: "天河区"},
-          {value: 100, name: "白云区"}
-        ],
-        pieTitle1: "监督执法",
+
         xData: [], //柱形图x轴数据
         xData1: [],
         yData: [], //柱形图y轴数据
@@ -112,8 +106,8 @@ import { levelData,convertData } from '@/utils/convert-data'
           value: 'YSNUM',
           label: '移送数量'
         }],
-        value: '立案数量',
-        valueBar: '立案数量'
+        value: 'LANUM',
+        valueBar: 'LANUM'
       }
     },
     created() {
@@ -198,16 +192,68 @@ import { levelData,convertData } from '@/utils/convert-data'
 </script>
 
 <style scoped lang='less'>
+  ::v-deep { 
+
+    .el-input__inner {
+      background-color: rgba(166, 255, 0, 0) !important;
+      border:1px transparent solid;
+      border-image:linear-gradient(to right,rgba(4,127,156,1),#e9eceb,#01cfff) 1 10;
+      box-shadow: 0px 0px 3px 1px #01cfff;
+      z-index: 10;
+      color: #fff;
+      font-size: 16px;
+      width: 180px;
+      text-align: left;
+    }
+    .el-select-dropdown {
+      background-color: rgba(20, 74, 116, 0);
+      .el-scrollbar{
+        background-color: rgba(20, 74, 116, 0.705);
+        color: #fff !important;
+        border:1px transparent solid;
+        border-image:linear-gradient(to right,rgba(4,127,156,1),#e9eceb,#01cfff) 1 10;
+        box-shadow: 0px 0px 3px 1px #01cfff;
+        .el-scrollbar__view {
+          color: #fff !important;
+          .el-select-dropdown__item {
+            font-size: 16px;
+            text-align: left;
+            color: #fff !important;
+          }
+          .hover {
+            background-image: linear-gradient(to right,rgba(2,157,193,1), rgb(3, 64, 110)) !important;
+          }
+          .selected {
+            font-weight: bold;
+            color: #00efff !important;
+          }
+        }
+      }
+    } 
+  }
+  // /deep/ .el-scrollbar{
+  //   background-color: rgba(20, 74, 116,.8);
+  //   color: #fff !important;
+  //   border:1px transparent solid;
+  //   border-image:linear-gradient(to right,rgba(4,127,156,1),#e9eceb,#01cfff) 1 10;
+  //   box-shadow: 0px 0px 3px 1px #01cfff;
+  // }
+
 .enforce {
   // height: 100%;
   .el-row,
   .el-col {
     height: 100% !important;
   }
+
   .content-right {
     height: 100%;
     display: flex;
     flex-direction: column;
+    
+    .content-select {
+      // background-color: rgb(255, 0, 0) !important;
+    }
     &-pie {
       margin-bottom: 15px;
     }

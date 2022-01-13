@@ -1,7 +1,7 @@
 <template>
   <div class="nav-menu">
     <el-menu
-      default-active="1"
+      :default-active="defaultActive"
       class="el-menu-vertical"
       unique-opened
       background-color="#5F88AF"
@@ -47,6 +47,7 @@ import icon4 from 'assets/img/side/icon-4.png'
     name: "",
     data() {
       return {
+        defaultActive: "1",
         userMenus :"",
         // iconName: icon1
         iconName: [
@@ -64,7 +65,13 @@ import icon4 from 'assets/img/side/icon-4.png'
     },
     created() {
       this.userMenus = userMenus
+      this.setCurrentRoute()
       // console.log(userMenus,"nav");
+    },
+    watch: {
+      $route () {
+        this.setCurrentRoute()
+      }
     },
     methods: {
       handleMenuItemClick(item) {
@@ -74,6 +81,26 @@ import icon4 from 'assets/img/side/icon-4.png'
         }else{
           this.$router.push('/not-found')
         }
+      },
+      setCurrentRoute () {
+        // this.defaultActive = this.$route.name//关键   通过他就可以监听到当前路由状态并激活当前菜单
+        let ac
+        switch(this.$route.name)
+        {
+          case "detail":
+            ac = "1"
+          break;
+          case "category":
+            ac = "2"
+          break;
+          case "review":
+            ac = "3"
+          break;
+          case "enforce":
+            ac = "4"
+          break;
+        }
+        this.defaultActive = ac
       }
     }
   }

@@ -11,6 +11,7 @@
 <script>
 import BaseEchart from '@/base-ui/echart/base-echart'
 import * as echarts from 'echarts'
+import { toolHtmlMix } from '@/utils/tool-html'
 
 export default {
   name: '',
@@ -56,7 +57,14 @@ export default {
         //   left: 'center'
         // },
         tooltip: {
-          trigger: 'axis'
+          trigger: 'axis',
+          padding: 0,
+          backgroundColor: 'opacity',
+          borderWidth: 0,
+          formatter: function (params) {
+            console.log(params);
+            return toolHtmlMix(params)
+          }
           // axisPointer: {
           //     type: 'cross',
           //     label: {
@@ -68,6 +76,7 @@ export default {
           data: ['检查任务量', '完成百分比（%）'],
           y: 'top',
           right: '6%',
+          selectedMode: false,
           textStyle: {
             color: '#fff',
             fontSize: 16,
@@ -165,7 +174,10 @@ export default {
             type: 'line',
             data: this.mixLineData,
             yAxisIndex: 1,
-            symbol: 'circle',
+            // symbol: 'circle',
+            symbolSize: 10,
+            color: '#FCC70A',
+
             itemStyle: {
               normal: {
                 label: {
@@ -197,7 +209,15 @@ export default {
               shadowColor: 'rgba(72,216,191, 0.3)',
               shadowBlur: 10,
               shadowOffsetY: 20
-            }
+            },
+                        emphasis: {
+              itemStyle: {
+                borderWidth: 8.5,
+              },
+              label: {
+                fontSize: 24,
+              }
+            },
           }
         ]
       }

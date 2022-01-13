@@ -11,6 +11,7 @@
 <script>
 import BaseEchart from '@/base-ui/echart/base-echart'
 import * as echarts from 'echarts'
+import { toolHtmlStack } from '@/utils/tool-html'
 
 export default {
   name: '',
@@ -57,11 +58,17 @@ export default {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
+          },
+          backgroundColor: 'opacity',
+          borderWidth: 0,
+          formatter: function (params) {
+            return toolHtmlStack(params)
           }
         },
         legend: {
           icon: 'circle',
           right: '6%',
+          selectedMode: false,
           textStyle: {
             color: '#fff',
             fontSize: 16,

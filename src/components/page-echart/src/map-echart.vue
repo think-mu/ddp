@@ -11,6 +11,9 @@
 <script>
 import BaseEchart from '@/base-ui/echart/base-echart'
 import { convertData } from '@/utils/convert-data'
+import { toolHtmlI, toolHtmlII, toolHtmlIII, toolHtmlIV, toolHtmlVI } from '@/utils/tool-html'
+import * as echarts from 'echarts'
+
 export default {
   name: '',
   components: {
@@ -36,6 +39,7 @@ export default {
     return {}
   },
   mounted() {},
+  methods: {},
   computed: {
     options() {
       return {
@@ -63,10 +67,9 @@ export default {
           right: 0,
           bottom: 0,
           top: 0,
-          
-          aspectScale: 1,
+          aspectScale: 1.04,
           layoutCenter: ['50%', '52.5%'], //地图位置
-          layoutSize: '90%',
+          layoutSize: '91%',
           emphasis: {
             label: {
               show: false
@@ -74,15 +77,15 @@ export default {
           },
           itemStyle: {
             normal: {
-              shadowColor: 'rgba(0,228,242,0.5)',
-              shadowBlur: 2,
-              // color: 'rgba(21,190,245,.6)',
-              color: 'rgba(19,106,182,.9)'
-              // shadowOffsetX: 10,
-              // shadowOffsetY: 11
+              color: 'rgba(37,162,222,.8)',
+              borderWidth: 0
+              // shadowColor: 'rgba(33, 93, 166, 0.9)',
+              // shadowBlur:8,
+              // shadowOffsetX: 2,
+              // shadowOffsetY: 8
             },
             emphasis: {
-              areaColor: 'rgba(21,190,245,.6)'
+              areaColor: 'rgba(37,162,222,.8)'
             }
           },
           z: 2
@@ -90,98 +93,23 @@ export default {
 
         tooltip: {
           show: true,
+          backgroundColor: 'opacity',
           trigger: 'item',
+          padding: 0,
+          borderWidth: 0,
+          // alwaysShowContent: true,
           formatter: function (params) {
             console.log(params, 'params')
             if (params.seriesName == 'detail') {
-              return params.name + ' : ' + params.data.value[0] + '家'
+              return toolHtmlI(params)
             } else if (params.seriesName == 'category') {
-              return (
-                params.name +
-                '</br>' +
-                'A级:' +
-                params.data.value[0].A +
-                '</br>' +
-                'B级:' +
-                params.data.value[0].B +
-                '</br>' +
-                'C级:' +
-                params.data.value[0].C +
-                '</br>' +
-                'D级:' +
-                params.data.value[0].D +
-                '</br>' +
-                '未评级:' +
-                params.data.value[0]['未评级']
-              )
+              return toolHtmlII(params)
             } else if (params.seriesName == 'review') {
-              // console.log(params,"review");
-              return (
-                params.name +
-                '</br>' +
-                '出动人次:' +
-                params.data.value[0].CDRC +
-                '</br>' +
-                '需整改数量:' +
-                params.data.value[0].XYZG +
-                '</br>' +
-                '已整改数量:' +
-                params.data.value[0].YZGCNUM +
-                '</br>' +
-                '检查数量:' +
-                params.data.value[0].CHECKNUM +
-                '</br>' +
-                '检查覆盖率:' +
-                params.data.value[0].FGL
-              )
+              return toolHtmlIII(params)
             } else if (params.seriesName == 'review1') {
-              return (
-                params.name +
-                '</br>' +
-                '计划数:' +
-                params.data.value[0].PLANNUM +
-                '</br>' +
-                '检查数:' +
-                params.data.value[0].YJC +
-                '</br>' +
-                '待复核检查数:' +
-                params.data.value[0].DFH +
-                '</br>' +
-                '未检查数:' +
-                params.data.value[0].WJC +
-                '</br>' +
-                '符合数:' +
-                params.data.value[0].FH +
-                '</br>' +
-                '限期整改:' +
-                params.data.value[0].XQZG +
-                '</br>' +
-                '复核检查数:' +
-                params.data.value[0].FHJC +
-                '</br>' +
-                '严重违反:' +
-                params.data.value[0].YZWF +
-                '</br>' +
-                '停业:' +
-                params.data.value[0].TY +
-                '</br>' +
-                '完成百分比:' +
-                params.data.value[0].WCBFB
-              )
+              return toolHtmlVI(params)
             } else if (params.seriesName == 'enforce') {
-              // console.log(params);
-              return (
-                params.name +
-                '</br>' +
-                '处置数:' +
-                params.data.value[0].CZNUM +
-                '</br>' +
-                '立案数:' +
-                params.data.value[0].LANUM +
-                '</br>' +
-                '移送数:' +
-                params.data.value[0].YSNUM
-              )
+              return toolHtmlIV(params)
             }
           }
         },
@@ -191,26 +119,27 @@ export default {
             zlevel: 2,
             symbolSize: 5,
             geoIndex: 0,
+            selectedMode: false,
             label: {
-              normal: {
-                formatter: '{b}',
-                position: 'left',
-                show: true,
-                color: '#fff'
-              },
+              show:false,
+              // normal: {
+              //   formatter: '{b}',
+              //   position: 'left',
+              //   show: false,
+              //   color: '#fff'
+              // },
               emphasis: {
-                show: true
+                show: false
               }
             },
 
             itemStyle: {
               normal: {
-                color: '#fff',
-
+                color: '#fff'
               }
             },
             name: this.mapName,
-            type: 'scatter',
+            type: 'map',//scatter
             coordinateSystem: 'geo',
             data: convertData(this.mapData)
           },
@@ -219,7 +148,7 @@ export default {
             roam: false,
             map: 'gz',
             center: [113.505367, 23.22559],
-            aspectScale: 1,
+            aspectScale: 1.04,
             zoom: 1.1,
             selectedMode: false,
             data: convertData(this.mapData),
@@ -230,16 +159,40 @@ export default {
               show: true,
               color: '#fff',
               fontSize: 14,
-              // formatter: '{b}: {@value.data[2]}',
               formatter: function (params) {
-                // console.log(params);
                 if (params.seriesName == 'detail') {
-                  return params.data.value[0] + '家' + '\n' + params.name
+                  // return params.data.value[0] + '家' + '\n' +  '{txt|'+params.name+'}'
+                  return  '{txt|'+params.name+'}'
                 } else if (params.seriesName == 'category') {
-                  return params.name
+                  // const resultLabeltip = `<div style=\'padding:2px 5px; background: rgb(34,184,104);border:1px #5DFA96 solid;\'>
+                  //    <span>${params.name} </span>
+                  // </div>`
+                  // return resultLabeltip
+                  return  '{txt|'+params.name+'}';
                 } else if (params.seriesName == 'review') {
                   // console.log(params,"review2");
                   // return params.name
+                  return  '{txt|'+params.name+'}';
+                  
+                } else if (params.seriesName == 'enforce') {
+                  // console.log(params,"review2");
+                  // return params.name
+                  return  '{txt|'+params.name+'}';
+                  
+                }
+              },
+              rich: {
+                txt: {
+                  padding:[1,5],
+                  backgroundColor: '#25BACC',
+                  borderWidth: 1,
+                  borderColor: '#58F2F7',
+                  borderRadius: 2,
+                  fontSize: 16
+                  // color: '#fff',
+                  // width: 10,
+                  // height: 10,
+                  // padding: [0, 0, 20, 0]
                 }
               }
             },
@@ -256,19 +209,57 @@ export default {
             itemStyle: {
               normal: {
                 areaColor: 'rgba(19,106,182,.9)',
-                borderColor: '#fff', //线
+                // borderColor: '#fff', //线
                 // shadowColor: '#B1DEF6', //外发光
-                // shadowBlur: 10,
+                borderColor: 'rgb(200,237,254)',
+                borderWidth: 1,
+                shadowColor: 'rgba(25, 83, 155, 0.9)', //rgba(20, 65, 121, 0.9)偏深色调
+                shadowBlur: 20,
+                opacity: 0.9,
 
+                areaColor: {
+                  type: 'linear-gradient',
+                  x: 0,
+                  y: 1000,
+                  x2: 200,
+                  y2: 150,
+                  colorStops: [
+                    {
+                      offset: 0.5,
+                      color: 'rgba(11, 219, 247, 0.8)' // 0% 处的颜色
+                    },
+                    {
+                      offset: 1,
+                      color: 'rgba(44, 128, 224, 0.8)' // 100% 处的颜色
+                    }
+                  ],
+                  global: true // 缺省为 false
+                }
               },
               emphasis: {
                 label: {
                   color: '#fff'
+                  // fontSize: 24,
                 },
-                areaColor: '#177AD1' //悬浮区背景
+                areaColor: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [
+                    {
+                      offset: 0,
+                      color: '#68b88e'
+                    },
+                    {
+                      offset: 1,
+                      color: '#e2d849'
+                    }
+                  ],
+                  false
+                ) //悬浮区背景
               }
-            },
-            
+            }
           }
           /* {
             name: this.mapName,

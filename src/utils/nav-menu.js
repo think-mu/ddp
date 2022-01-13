@@ -25,7 +25,7 @@ export default [
   },
 
   {
-    id: 5,
+    id: 4,
     name: '监督执法',
     type: 2,
     url: '/main/enforce/enforce',

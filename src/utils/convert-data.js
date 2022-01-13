@@ -19,7 +19,9 @@ export const convertData = function (data) {
     if (geoCoord) {
       res.push({
         name: data[i].name,
-        value: geoCoord.concat(data[i].value).reverse()
+        value: geoCoord.concat(data[i].value)
+        // value: geoCoord.concat(data[i].value).reverse()
+
         // value: data[i].value
       })
     }

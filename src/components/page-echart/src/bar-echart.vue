@@ -12,6 +12,7 @@
 import * as echarts from 'echarts'
 import BaseEchart from '@/base-ui/echart/base-echart'
 import imgSrc from 'assets/img/card/bar-bg.png'
+import { toolHtmlBar } from '@/utils/tool-html'
 
 export default {
   name: '',
@@ -65,6 +66,12 @@ export default {
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
           },
           z: 2,
+          padding: 0,
+          backgroundColor: 'opacity',
+          borderWidth: 0,
+          formatter: function (params) {
+            return toolHtmlBar(params)
+          }
         },
         grid: {
           left: '3%',
@@ -119,7 +126,7 @@ export default {
               fontSize: 16,
               position: 'top',
               formatter: function (params) {
-                return params.value + '家'
+                return params.value 
               }
             },
             z: 1,

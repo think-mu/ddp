@@ -1,21 +1,17 @@
 <template>
   <div class="review">
     <el-row :gutter="20">
-      <!-- <s-card title="tie" class="map"></s-card> -->
-
       <el-col :span="12">
         <div class="board">
           <div class="board-btn">
-            <!-- <el-button round v-for="(item,index) in btnName" :key="index">{{item}}</el-button> -->
             <el-radio-group v-model="radio" @change="selectItem">
-              <!-- <el-button round v-for="(item,index) in btnName" :key="index">{{item}}</el-button> -->
               <el-radio-button
                 v-for="(item, index) in btnName"
                 :label="item"
               ></el-radio-button>
             </el-radio-group>
           </div>
-          <div class="board-data">
+          <!-- <div class="board-data">
             <div
               class="board-data-item"
               v-for="(item, index) in totalData"
@@ -27,12 +23,19 @@
                 <span>{{ item.num }}</span>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <s-card title="全市监督检查情况" class="map">
-          <!-- width="60%" -->
+          <div class="map-hd">
+            <ul v-for="(item, index) in totalData" :key="index">
+              <li>
+                <span>{{ item.num }}</span
+                ><span>{{ item.name }}</span>
+              </li>
+            </ul>
+          </div>
           <map-echart
-            height="605px"
+            height="695px"
             width="100%"
             :mapData="mapData"
             :mapName="mapItem"
@@ -51,13 +54,16 @@
               <el-form-item label-width="100px">
                 <el-select v-model="formSpecial.year" placeholder="年度">
                   <el-option label="2021" value="2021"></el-option>
-                  <!-- <el-option label="区域二" value="beijing"></el-option> -->
                 </el-select>
               </el-form-item>
               <el-form-item>
                 <el-select v-model="formSpecial.plan" placeholder="方案名称">
-                  <el-option v-for="item in PlanData" :key='item.value' :label="item.label" :value="item.value"></el-option>
-                  
+                  <el-option
+                    v-for="item in PlanData"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item>
@@ -92,13 +98,6 @@
           :isShowIcon="isShowIcon"
           @changeShowIcon="changeShowIcon"
         >
-          <!-- <bar-echart
-            height="280px"
-            :xData="xData"
-            :yData="yData"
-            @barClick="barClick"
-            v-show="!isShowIcon"
-          ></bar-echart> -->
           <multi-bar-echart
             height="325px"
             :source="source"
@@ -192,16 +191,20 @@ export default {
         year: '2021',
         plan: ''
       }, //筛选
-      PlanData1: [{
+      PlanData1: [
+        {
           value: 'LANUM',
           label: '立案数量'
-        }, {
+        },
+        {
           value: 'CZNUM',
           label: '处置数量'
-        }, {
+        },
+        {
           value: 'YSNUM',
           label: '移送数量'
-        }]
+        }
+      ]
     }
   },
   created() {
@@ -338,7 +341,7 @@ export default {
       })
     },
     //获取筛选方案信息
-    getPlanInfo({ vYaer = 2021 } = {}){
+    getPlanInfo({ vYaer = 2021 } = {}) {
       const data = {
         region: '',
         action: 'plan',
@@ -350,9 +353,9 @@ export default {
       }
       mainInfo(qs.stringify(data)).then((res) => {
         this.planData = res.data.map((item) => {
-          return {label:item.PLAN_NAME,value:item.PLAN_ID.toString()}
+          return { label: item.PLAN_NAME, value: item.PLAN_ID.toString() }
         })
-       console.log(this.planData,"planData");
+        console.log(this.planData, 'planData')
       })
     },
 
@@ -458,7 +461,7 @@ export default {
     },
     /* 柱形图事件 end*/
     onSubmit(param) {
-      console.log(this.formSpecial);
+      console.log(this.formSpecial)
     }
   }
 }
@@ -471,41 +474,46 @@ export default {
     height: 100% !important;
   }
   .board {
-    height: 140px;
+    height: 50px;
     width: 100%;
     border-radius: 5px;
-    background: linear-gradient(to right, #82badf, #e3eff3) !important;
+    // background: linear-gradient(to right, #82badf8f, #0ca6daa1) !important;
     margin-bottom: 10px;
 
     &-btn {
       line-height: 50px;
       width: 100%;
-      border-bottom: 1px solid #ffffff;
       .el-radio-group {
         padding-top: 5px;
         padding-bottom: 5px;
-        display: flex;
-        flex-direction: row;
-        flex: 1;
-        justify-content: space-around;
+        // display: flex;
+        // flex-direction: row;
+        // flex: 1;
+        // justify-content: space-around;
         .el-radio-button {
           z-index: 9;
           color: #fff;
-          border-radius: 15px !important;
+          // border-radius: 15px !important;
           /deep/.el-radio-button__inner {
             color: #fff;
-            background: linear-gradient(to top, #4cc5ec, #46d7d1) !important;
-            border-radius: 15px !important;
+            background: linear-gradient(to top, #2c647700, #49a9e094) !important;
+            border: 1px solid rgba(146, 239, 255, 0.315);
+
+            // border-radius: 15px !important;
           }
           /deep/.el-radio-button__inner:hover {
-            background: linear-gradient(to top, #5756d7, #348eca) !important;
+            background: linear-gradient(to top, #69c2e6, #348eca) !important;
           }
         }
         .is-active {
           /deep/.el-radio-button__inner {
             color: #fff;
-            background: linear-gradient(to top, #5756d7, #348eca) !important;
-            border-radius: 15px !important;
+            font-size: 16px;
+            // font-weight: bold;
+            border: 1px solid rgba(134, 234, 252, 0.774);
+            box-shadow: 0px 0px 6px 3px rgb(93, 204, 248) !important;
+            background: linear-gradient(to top, #18befffb, #2fa6f598) !important;
+            // border-radius: 15px !important;
           }
         }
       }
@@ -520,7 +528,7 @@ export default {
         background: linear-gradient(to top, #5756d7, #348eca) !important;
       }
     }
-    &-data {
+  /*   &-data {
       height: 80px;
       align-items: center;
       display: flex;
@@ -570,8 +578,51 @@ export default {
           background: #409eff;
         }
       }
+    } */
+  }
+  .map {
+    position: relative;
+    .map-hd {
+      position: absolute;
+      top: 50px;
+      left: -10px;
+      display: flex;
+      width:56%;
+      ul {
+        width: 260px;
+        li {
+          flex: 1;
+          list-style-type: none;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-evenly;
+          text-align: center;
+          height: 113px;
+          background: url('../../../assets/img/total-icon.png') no-repeat center
+            top;
+        }
+        span:first-child {
+          font-family: 'electronicFont';
+          line-height: 40px;
+          font-size: 40px;
+          margin-top: 10px;
+          // color: #faa60b;
+          background-image: -webkit-linear-gradient(bottom, #ff7200, #ffee30);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        span:last-child {
+          font-family: 'electronicFont';
+          line-height: 18px;
+          font-size: 18px;
+          color: #e5f0f1;
+          text-shadow: 2px 2px 8px #aaf2ff;
+          margin-top: 30px;
+        }
+      }
     }
   }
+
   .content-right {
     height: 100%;
     display: flex;
@@ -581,7 +632,6 @@ export default {
       display: flex;
       align-items: center;
       flex-direction: row;
-   
     }
     &-pie {
       margin-bottom: 15px;

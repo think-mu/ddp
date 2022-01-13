@@ -12,6 +12,7 @@
 <script>
 import BaseEchart from '@/base-ui/echart/base-echart'
 import imgSrc from 'assets/img/card/pie-bg.png'
+import { toolHtmlPie } from '@/utils/tool-html'
 
 export default {
   name: '',
@@ -59,7 +60,14 @@ export default {
         },
         color: ['#59B3FF', '#006A75', '#00FFF0', '#0091C7', '#27C5FC', '#0060FF','#06FDBC', '#F6FE05', '#07B0FE', '#FDB408', '#00DB1C', '#0188FE'],
         tooltip: {
-          trigger: 'item'
+          show: true,
+          backgroundColor: 'opacity',
+          trigger: 'item',
+          padding: 0,
+          borderWidth: 0,
+          formatter: function (params) {
+            return toolHtmlPie(params)
+          }
         },
         legend: {
           bottom: '3%',
@@ -168,5 +176,6 @@ export default {
 <style scoped lang="less">
 .pie-chart {
   width: 50%;
+  color:#144a74e6
 }
 </style>

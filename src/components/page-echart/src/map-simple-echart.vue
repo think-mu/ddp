@@ -11,6 +11,8 @@
 <script>
 import BaseEchart from '@/base-ui/echart/base-echart'
 import { convertData } from '@/utils/convert-data'
+import { toolHtmlI, toolHtmlII, toolHtmlIV } from '@/utils/tool-cate-html'
+
 export default {
   name: '',
   components: {
@@ -86,46 +88,46 @@ export default {
             //   console.log(params, '333')
             // }
           },
-          regions: [
-            //对不同的区块进行着色
-            {
-              name: '番禺区',
-              itemStyle: {
-                areaColor: '#5CD89E'
-              }
-            },
-            {
-              name: '荔湾区',
-              itemStyle: {
-                areaColor: '#FCCF73'
-              }
-            }
-          ]
+          // regions: [
+          //   //对不同的区块进行着色
+          //   {
+          //     name: '番禺区',
+          //     itemStyle: {
+          //       areaColor: '#5CD89E'
+          //     }
+          //   },
+          //   {
+          //     name: '荔湾区',
+          //     itemStyle: {
+          //       areaColor: '#FCCF73'
+          //     }
+          //   }
+          // ]
         },
 
         tooltip: {
           trigger: 'item',
           formatter: function (params) {
             if (params.seriesName == 'detail') {
-              return params.name + ' : ' + params.data.value[0] + '家'
+              return params.name + ' : ' + params.data.value[2] + '家'
             } else if (params.seriesName == 'category') {
               return (
                 params.name +
                 '</br>' +
                 'A级:' +
-                params.data.value[0].A +
+                params.data.value[2].A +
                 '</br>' +
                 'B级:' +
-                params.data.value[0].B +
+                params.data.value[2].B +
                 '</br>' +
                 'C级:' +
-                params.data.value[0].C +
+                params.data.value[2].C +
                 '</br>' +
                 'D级:' +
-                params.data.value[0].D +
+                params.data.value[2].D +
                 '</br>' +
                 '未评级:' +
-                params.data.value[0]['未评级']
+                params.data.value[2]['未评级']
               )
             } else if (params.seriesName == 'review') {
               // console.log(params,"review");
@@ -133,53 +135,53 @@ export default {
                 params.name +
                 '</br>' +
                 '出动人次:' +
-                params.data.value[0].CDRC +
+                params.data.value[2].CDRC +
                 '</br>' +
                 '需整改数量:' +
-                params.data.value[0].XYZG +
+                params.data.value[2].XYZG +
                 '</br>' +
                 '已整改数量:' +
-                params.data.value[0].YZGCNUM +
+                params.data.value[2].YZGCNUM +
                 '</br>' +
                 '检查数量:' +
-                params.data.value[0].CHECKNUM +
+                params.data.value[2].CHECKNUM +
                 '</br>' +
                 '检查覆盖率:' +
-                params.data.value[0].FGL
+                params.data.value[2].FGL
               )
             } else if (params.seriesName == 'review1') {
               return (
                 params.name +
                 '</br>' +
                 '计划数:' +
-                params.data.value[0].PLANNUM +
+                params.data.value[2].PLANNUM +
                 '</br>' +
                 '检查数:' +
-                params.data.value[0].YJC +
+                params.data.value[2].YJC +
                 '</br>' +
                 '待复核检查数:' +
-                params.data.value[0].DFH +
+                params.data.value[2].DFH +
                 '</br>' +
                 '未检查数:' +
-                params.data.value[0].WJC +
+                params.data.value[2].WJC +
                 '</br>' +
                 '符合数:' +
-                params.data.value[0].FH +
+                params.data.value[2].FH +
                 '</br>' +
                 '限期整改:' +
-                params.data.value[0].XQZG +
+                params.data.value[2].XQZG +
                 '</br>' +
                 '复核检查数:' +
-                params.data.value[0].FHJC +
+                params.data.value[2].FHJC +
                 '</br>' +
                 '严重违反:' +
-                params.data.value[0].YZWF +
+                params.data.value[2].YZWF +
                 '</br>' +
                 '停业:' +
-                params.data.value[0].TY +
+                params.data.value[2].TY +
                 '</br>' +
                 '完成百分比:' +
-                params.data.value[0].WCBFB
+                params.data.value[2].WCBFB
               )
             } else if (params.seriesName == 'enforce') {
               // console.log(params);
@@ -187,13 +189,13 @@ export default {
                 params.name +
                 '</br>' +
                 '处置数:' +
-                params.data.value[0].CZNUM +
+                params.data.value[2].CZNUM +
                 '</br>' +
                 '立案数:' +
-                params.data.value[0].LANUM +
+                params.data.value[2].LANUM +
                 '</br>' +
                 '移送数:' +
-                params.data.value[0].YSNUM
+                params.data.value[2].YSNUM
               )
             }
           }

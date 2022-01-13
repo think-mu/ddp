@@ -11,6 +11,8 @@
 <script>
 import * as echarts from 'echarts'
 import BaseEchart from '@/base-ui/echart/base-echart'
+import { toolHtmlMultiBar } from '@/utils/tool-html'
+
 export default {
   name: '',
   components: {
@@ -76,6 +78,7 @@ export default {
           // left: 'right',
           right: '10%',
           icon: "circle",
+          selectedMode: false,
           textStyle: {
             color: '#fff',
             fontSize: 16,
@@ -86,6 +89,12 @@ export default {
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          },
+          padding: 0,
+          backgroundColor: 'opacity',
+          borderWidth: 0,
+          formatter: function (params) {
+            return toolHtmlMultiBar(params)
           }
         },
         grid: {

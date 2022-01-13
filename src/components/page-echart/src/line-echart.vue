@@ -10,6 +10,8 @@
 
 <script>
 import BaseEchart from '@/base-ui/echart/base-echart'
+import { toolHtmlLine } from '@/utils/tool-html'
+
 export default {
   name: '',
   components: {
@@ -39,7 +41,13 @@ export default {
     options() {
       return {
         tooltip: {
-          trigger: 'axis'
+          trigger: 'axis',
+          padding: 0,
+          backgroundColor: 'opacity',
+          borderWidth: 0,
+          formatter: function (params) {
+            return toolHtmlLine(params)
+          }
         },
         grid: {
           top: '12%',
