@@ -24,19 +24,27 @@
             height="325px"
             :pieData="pieAllData"
             :pieTitle="pieTitle1"
+            legendWidth="300"
             @pieClick="pieClick"
           ></pie-echart>
           <pie-echart
             height="325px"
             :pieData="pieAreaData"
             :pieTitle="pieTitle2"
+            legendWidth="380"
           ></pie-echart>
         </s-card>
         <s-card
           title="各类型药品企业数量"
           :isShowIcon="isShowIcon"
           @changeShowIcon="changeShowIcon"
+          class="content-right-bar"
         >
+          <div class="content-right-bar-total">
+            <span class="content-right-bar-total-label">{{aLabel}}</span>
+            <span class="content-right-bar-total-num" v-show="!isShowIcon">{{aTotal}}</span>
+            <span class="content-right-bar-total-num" v-if="isShowIcon">{{bTotal}}</span>
+          </div>
           <bar-echart
             height="325px"
             :xData="xData"
@@ -75,11 +83,7 @@ export default {
   data() {
     return {
       pieAllData: [], //饼图数据
-      pieAreaData: [
-        {value: 100, name: "番禺区"},
-        {value: 100, name: "荔湾区"},
-        {value: 100, name: "天河区"},
-        {value: 100, name: "白云区"}],
+      pieAreaData: [],
       pieTitle1: '各类型药品企业数量', //各类型药品企业数量饼图title
       pieTitle2: '药品生产企业数量',
       xData: [], //柱形图x轴数据
@@ -88,7 +92,10 @@ export default {
       yData1: [],
       mapData: [], //地图数据
       isShowIcon: false, //是否现实柱形图返回按钮
-      totalData: [] //今日统计数据
+      totalData: [], //今日统计数据
+      aTotal: 0,//柱形图全市企业数量
+      bTotal: 0,
+      aLabel: "各类型药品企业总数（家）",//柱形图全市某企业类型数量
     }
   },
   created() {
@@ -161,6 +168,11 @@ export default {
             value: item.NUM
           }
         })
+        this.aTotal = res.data.map((item) => {
+          return item.NUM
+        }).reduce((prev,curr) => {
+            return prev+curr
+        })
       })
     },
     //根据企业类型获取各区数量
@@ -203,6 +215,11 @@ export default {
             value: item.NUM
           }
         })
+        // this.bTotal = res.data.map((item) => {
+        //   return item.NUM
+        // }).reduce((prev,curr) => {
+        //     return prev+curr
+        // })
       })
     },
     /* 数据获取 end */
@@ -216,13 +233,17 @@ export default {
 
     /* 柱形图事件 start*/
     barClick(param) {
+      console.log(param);
+      this.bTotal = param.value
       this.getBarAraeData(param.name)
+      this.aLabel = param.name+"总数（家）"
       this.isShowIcon = true
       // console.log(param, '柱形图')
     },
     changeShowIcon(val) {
-      // console.log(val)
       this.isShowIcon = val
+      this.aLabel = "各类型药品企业总数（家）"
+      // this.aTotal = 
     }
     /* 柱形图事件 end*/
   }
@@ -315,6 +336,35 @@ export default {
   &-pie {
     margin-bottom: 15px;
   }
-
+  &-bar {
+    position: relative;
+    &-total {
+      position: absolute;
+      top: 70px;
+      left: 56px;
+      width: 312px;
+      height: 73px;
+      background: url('../../../assets/img/card/total-bg.png') no-repeat;
+      background-size: 100% 100% !important;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      text-align: center;
+      justify-content: center;
+      &-label {
+        background-image:-webkit-linear-gradient(bottom,#6EDBFF,#FFFFFF);
+        font-weight: bold;
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+      }
+      &-num {
+        font-weight: bold;
+        text-shadow: 2px 2px 22px #52d5ec;
+        // text-shadow: 0px 2px 0px #fff, 0 0 2px #fff, 0 0 0px #fff, 0 0 4px #52d5ec, 0 0 4px #52d5ec;
+        font-size: 22px;
+        color: #FFFFFF;
+      }
+    }
+  }
 }
 </style>

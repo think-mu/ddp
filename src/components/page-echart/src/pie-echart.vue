@@ -34,6 +34,10 @@ export default {
     pieTitle: {
       type: String,
       default: ''
+    },
+    legendWidth: {
+      type: String,
+      default: "300"
     }
   },
   data() {
@@ -70,15 +74,16 @@ export default {
           }
         },
         legend: {
-          bottom: '3%',
+          bottom: '1%',
           left: 'center',
-          width: 300,
+          width: this.legendWidth,
+          height: 'auto',
           align: 'left',
           orient: 'horizontal',
-          backgroundColor: 'rgba(34,56,89,.6)',
+          backgroundColor: 'rgba(45, 65, 95, 0.8)',
           textStyle: {
             color: '#fff',
-            fontSize: 12,
+            fontSize: 14,
             fontWeight: 'normal'
           },
           icon: "circle",

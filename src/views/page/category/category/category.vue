@@ -69,14 +69,9 @@ import { levelData,convertData } from '@/utils/convert-data'
       return {
         mapData: [],
         pieAllData: [],
-        pieAreaData: [
-          {value: 100, name: "番禺区"},
-          {value: 100, name: "荔湾区"},
-          {value: 100, name: "天河区"},
-          {value: 100, name: "白云区"}
-        ],
+        pieAreaData: [],
         pieTitle1: "药品企业信用情况",
-        pieTitle2: "各辖区A药品企业数量",
+        pieTitle2: "A药品企业数量",
         xData: [], //柱形图x轴数据
         xData1: [],
         yData: [], //柱形图y轴数据
@@ -188,7 +183,7 @@ import { levelData,convertData } from '@/utils/convert-data'
       pieClick(param) {
         // console.log(param,"并行");
         this.getPieAraeData(param.name)
-        this.pieTitle2 = '各辖区'+param.name + '药品企业数量'
+        this.pieTitle2 = param.name + '级别药品企业数量'
         
       },
       /* 饼形图事件 end*/

@@ -99,7 +99,7 @@ export default {
           borderWidth: 0,
           // alwaysShowContent: true,
           formatter: function (params) {
-            console.log(params, 'params')
+            // console.log(params, 'params')
             if (params.seriesName == 'detail') {
               return toolHtmlI(params)
             } else if (params.seriesName == 'category') {

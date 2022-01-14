@@ -39,6 +39,7 @@ import {
   Card,
   Row,
   Col,
+  DatePicker,
  } from 'element-ui';
 
 export default Vue => {
@@ -80,6 +81,7 @@ export default Vue => {
   Vue.use(Card);
   Vue.use(Row);
   Vue.use(Col);
+  Vue.use(DatePicker);
   Vue.prototype.$msgbox = MessageBox
   Vue.prototype.$message = Message
   Vue.prototype.$alert = MessageBox.alert

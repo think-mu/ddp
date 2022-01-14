@@ -62,7 +62,7 @@ export default {
           backgroundColor: 'opacity',
           borderWidth: 0,
           formatter: function (params) {
-            console.log(params);
+            // console.log(params);
             return toolHtmlMix(params)
           }
           // axisPointer: {

@@ -44,22 +44,29 @@
       </el-col>
       <el-col :span="12" class="content-right">
         <s-card title="监督检查情况" class="content-right-pie">
-          <template v-slot:select v-if="false">
+          <template v-slot:select v-if="isShowSec">
             <el-form
               :inline="true"
               :model="formSpecial"
               class="content-form"
               size="mini"
             >
-              <el-form-item label-width="100px">
-                <el-select v-model="formSpecial.year" placeholder="年度">
+              <el-form-item label-width="80">
+                <!-- <el-select v-model="formSpecial.year" placeholder="年度">
                   <el-option label="2021" value="2021"></el-option>
-                </el-select>
+                </el-select> -->
+                <el-date-picker
+                  v-model="formSpecial.year"
+                  value-format="yyyy"
+                  type="year"
+                  :picker-options="pickerOptions"
+                  placeholder="选择年">
+                </el-date-picker>
               </el-form-item>
               <el-form-item>
                 <el-select v-model="formSpecial.plan" placeholder="方案名称">
                   <el-option
-                    v-for="item in PlanData"
+                    v-for="item in planData"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -188,7 +195,7 @@ export default {
       stackData: [], //gsp堆积图数据
       stackSimpleData: [],
       formSpecial: {
-        year: '2021',
+        year: new Date('2021'),
         plan: ''
       }, //筛选
       PlanData1: [
@@ -204,16 +211,32 @@ export default {
           value: 'YSNUM',
           label: '移送数量'
         }
-      ]
+      ],
+      planData:[],
+      // timeDefaultShow: new Date('2021'),
+      pickerOptions: {
+        disabledDate(time) {
+          return (
+            time.getTime() > Date.now() ||
+            time.getTime() < new Date('2021')
+          )
+        },
+      },
+    //   pickerBeginDateBefore:{
+    //     disabledDate(time) {
+    //       return time.getTime() > Date.now();
+    //     }
+    // },
     }
   },
   created() {
+    this.getPlanInfo()
+    // console.log(this.PlanData);
     this.getTotalData()
     this.getMapInfo()
     this.getBarFri()
     this.getLineInfo()
     this.getStackThi()
-    this.getPlanInfo()
     // this.getMixSec()
     // this.getLevelInfo()
     // this.getPieAraeData('A')
@@ -301,12 +324,13 @@ export default {
       })
     },
     //获取折线图数据
-    getLineInfo() {
+    getLineInfo({ vCategory = '日常检查' } = {}) {
       const data = {
         region: '',
         action: 'trend',
         type: 'T01',
-        model: 1
+        model: 1,
+        category: vCategory
       }
       mainInfo(qs.stringify(data)).then((res) => {
         this.xLineData = res.data.map((item) => {
@@ -352,8 +376,9 @@ export default {
         planId: ''
       }
       mainInfo(qs.stringify(data)).then((res) => {
+        console.log(res.data,"ddd");
         this.planData = res.data.map((item) => {
-          return { label: item.PLAN_NAME, value: item.PLAN_ID.toString() }
+          return { label: item.PLAN_NAME, value: item.PLAN_ID }
         })
         console.log(this.planData, 'planData')
       })
@@ -414,6 +439,7 @@ export default {
     //获取更新柱形图辖区分级数据
     getBarAraeData(param) {},
     /* 数据获取 end */
+
     // 业务按钮选择事件
     selectItem(val) {
       if (val == '零售药店GSP跟踪检查') {
@@ -425,7 +451,6 @@ export default {
         // this.getStackThi({vYaer:this.pickYear})
       } else {
         if (val == '专项检查') {
-          console.log('!')
           this.isShowFri = false
           this.isShowSec = true
           this.isShowThi = false
@@ -436,6 +461,7 @@ export default {
           this.isShowFri = true
           this.isShowSec = false
           this.isShowThi = false
+          this.getLineInfo({ vCategory: val })
           this.getBarFri({ vYaer: this.pickYear, vCategory: val })
         }
         this.mapItem = 'review'
@@ -462,6 +488,8 @@ export default {
     /* 柱形图事件 end*/
     onSubmit(param) {
       console.log(this.formSpecial)
+      const yy = this.formSpecial.year.getFullYear();
+      
     }
   }
 }

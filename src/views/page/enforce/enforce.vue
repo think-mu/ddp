@@ -24,6 +24,7 @@
           <pie-echart
             style="padding-left: 20%;"
             height="325px"
+            legendWidth="400"
             :pieData="pieAllData"
           ></pie-echart>
         </s-card>
