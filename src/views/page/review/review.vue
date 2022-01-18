@@ -45,26 +45,34 @@
       <el-col :span="12" class="content-right">
         <s-card title="监督检查情况" class="content-right-pie">
           <template v-slot:select v-if="isShowSec">
+            <el-switch
+              v-model="switchValue"
+              >
+            </el-switch>
             <el-form
+              v-if="switchValue"
               :inline="true"
               :model="formSpecial"
               class="content-form"
               size="mini"
+              :rules="rules" 
+              ref="ruleForm"
             >
-              <el-form-item label-width="80">
+              <el-form-item label-width="80" prop="year">
                 <!-- <el-select v-model="formSpecial.year" placeholder="年度">
                   <el-option label="2021" value="2021"></el-option>
                 </el-select> -->
                 <el-date-picker
                   v-model="formSpecial.year"
-                  value-format="yyyy"
                   type="year"
+                  popper-class="yselect"
                   :picker-options="pickerOptions"
+                  :popper-append-to-body="false"
                   placeholder="选择年">
                 </el-date-picker>
               </el-form-item>
-              <el-form-item>
-                <el-select v-model="formSpecial.plan" placeholder="方案名称">
+              <el-form-item prop="plan">
+                <el-select v-model="formSpecial.plan" placeholder="方案名称" :popper-append-to-body="false">
                   <el-option
                     v-for="item in planData"
                     :key="item.value"
@@ -74,7 +82,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
+                <el-button type="primary" @click="onSubmit('ruleForm')" >查询</el-button>
               </el-form-item>
             </el-form>
           </template>
@@ -91,7 +99,7 @@
             :mixXdata="mixXdata"
             :mixLineData="mixLineData"
             :mixBarData="mixBarData"
-            v-if="isShowSec"
+            v-if="!switchValue && isShowSec"
           ></mix-echart>
           <stack-echart
             height="325px"
@@ -99,6 +107,14 @@
             :stackData="stackData"
             v-if="isShowThi"
           ></stack-echart>
+          <!-- <h1 v-if="isShowSecCh">test</h1> -->
+          <stack-simple-echart-se
+            ref="se"
+            height="325px"
+            :fromData='formSpecial'
+            :stackData='stackSimpleDatai'
+            v-if="switchValue"
+          ></stack-simple-echart-se>
         </s-card>
         <s-card
           title="监督检查情况"
@@ -141,6 +157,7 @@ import LineEchart from '@/components/page-echart/src/line-echart'
 import MixEchart from '@/components/page-echart/src/mix-echart'
 import StackEchart from '@/components/page-echart/src/stack-echart'
 import StackSimpleEchart from '@/components/page-echart/src/stack-simple-echart'
+import StackSimpleEchartSe from '@/components/page-echart/src/stack-simple-echart-se'
 import MultiBarEchart from '@/components/page-echart/src/multi-bar-echart'
 import MapEchart from '@/components/page-echart/src/map-echart'
 import { dataTotal } from 'service/main/detail/detail'
@@ -157,10 +174,12 @@ export default {
     LineEchart,
     MixEchart,
     StackEchart,
-    StackSimpleEchart
+    StackSimpleEchart,
+    StackSimpleEchartSe,
   },
   data() {
     return {
+      switchValue: false,
       btnName: [
         '日常检查',
         '专项检查',
@@ -187,6 +206,7 @@ export default {
       isShowFri: true, //日常，有因，飞行
       isShowSec: false, // 专项
       isShowThi: false, // gsp
+      isShowSecCh: false, // 专项具体
       xLineData: [], // 年度折线图x轴
       LineData: [], //年度折线图数据
       mixXdata: [], //专项混合图x轴数
@@ -194,9 +214,10 @@ export default {
       mixBarData: [], // 专项混合图柱形数据
       stackData: [], //gsp堆积图数据
       stackSimpleData: [],
+      stackSimpleDatai:{},//专项详细数据
       formSpecial: {
         year: new Date('2021'),
-        plan: ''
+        plan: 680
       }, //筛选
       PlanData1: [
         {
@@ -222,25 +243,39 @@ export default {
           )
         },
       },
-    //   pickerBeginDateBefore:{
-    //     disabledDate(time) {
-    //       return time.getTime() > Date.now();
-    //     }
-    // },
+      rules:{
+        year: [
+          { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+        ],
+        plan: [
+          { required: true, message: '请选择方案', trigger: 'change' }
+        ],
+      }//表单验证规则
+
     }
   },
   created() {
-    this.getPlanInfo()
+    this.getPlanInfo({ vYaer: this.formSpecial.year,vPlanId: this.formSpecial.plan })
     // console.log(this.PlanData);
     this.getTotalData()
     this.getMapInfo()
     this.getBarFri()
     this.getLineInfo()
     this.getStackThi()
-    // this.getMixSec()
+    this.getMixSec({ vYaer: this.pickYear,vLevel: 2 })
     // this.getLevelInfo()
     // this.getPieAraeData('A')
   },
+  // computed: {
+  //   btnStatus() {
+  //     if(this.formSpecial.plan&&this.formSpecial.year) {
+  //       return true
+  //     }else {
+  //       return false
+  //     }
+      
+  //   }
+  // },
   methods: {
     /* 数据获取 start */
     //今日统计数据
@@ -342,45 +377,96 @@ export default {
       })
     },
     //获取专项柱形折线混合数据
-    getMixSec({ vYaer = 2021 } = {}) {
+    getMixSec({ vYaer = 2021,vLevel= 1,vPlanId= '' } = {}) {
       const data = {
         region: '',
         action: 'plan',
         type: 'T01',
-        level: 1,
+        level: vLevel,
         year: vYaer,
         name: '',
-        planId: ''
+        planId: vPlanId
       }
       mainInfo(qs.stringify(data)).then((res) => {
-        this.mixXdata = res.data.map((item) => {
-          return item.REGION
-        })
-        this.mixBarData = res.data.map((item) => {
-          return item.JCRWL
-        })
-        this.mixLineData = res.data.map((item) => {
-          return parseInt(item.WCBFB)
-        })
+        if(vLevel==1){ //获取专项柱形折线混合数据
+          this.mixXdata = res.data.map((item) => {
+            return item.REGION
+          })
+          this.mixBarData = res.data.map((item) => {
+            return item.JCRWL
+          })
+          this.mixLineData = res.data.map((item) => {
+            return parseInt(item.WCBFB)
+          })
+        }else if(vLevel==2){ //获取筛选方案信息
+          this.planData = res.data.map((item) => {
+            return { label: item.PLAN_NAME, value: item.PLAN_ID }
+          })
+        }
+        // else if(vLevel==3){ //获取筛选方案信息
+        //   console.log(res,"999");
+        //   this.stackSimpleDatai.REGIONNAME = res.data.map((item) => {
+        //     return item.GROUPNAME
+        //   })
+        //   this.stackSimpleDatai.PLANNUM = res.data.map((item) => {
+        //     return item.PLANNUM
+        //   })
+        //   this.stackSimpleDatai.CHECKEDNUM = res.data.map((item) => {
+        //     return item.CHECKEDNUM
+        //   })
+        //   this.stackSimpleDatai.RECTIFYNUM = res.data.map((item) => {
+        //     return item.RECTIFYNUM
+        //   })
+        //   this.stackSimpleDatai.MUSTCHECKNUM = res.data.map((item) => {
+        //     return item.MUSTCHECKNUM
+        //   })
+        //   this.stackSimpleDatai.FLAG = res.data.map((item) => {
+        //     return parseInt(item.FLAG)
+        //   })
+
+        
+        
       })
     },
     //获取筛选方案信息
-    getPlanInfo({ vYaer = 2021 } = {}) {
+    getPlanInfo({ vYaer = 2021,vPlanId = 860 } = {}) {
       const data = {
         region: '',
         action: 'plan',
         type: 'T01',
-        level: 2,
+        level: 3,
         year: vYaer,
         name: '',
-        planId: ''
+        planId: vPlanId
       }
       mainInfo(qs.stringify(data)).then((res) => {
-        console.log(res.data,"ddd");
-        this.planData = res.data.map((item) => {
-          return { label: item.PLAN_NAME, value: item.PLAN_ID }
-        })
-        console.log(this.planData, 'planData')
+        // console.log(res.data, 'planData')
+          this.stackSimpleDatai.REGIONNAME = res.data.map((item) => {
+            return item.GROUPNAME
+          })
+          this.stackSimpleDatai.PLANNUM = res.data.map((item) => {
+            return item.PLANNUM
+          })
+          this.stackSimpleDatai.CHECKEDNUM = res.data.map((item) => {
+            return item.CHECKEDNUM
+          })
+          this.stackSimpleDatai.RECTIFYNUM = res.data.map((item) => {
+            return item.RECTIFYNUM
+          })
+          this.stackSimpleDatai.MUSTCHECKNUM = res.data.map((item) => {
+            return item.MUSTCHECKNUM
+          })
+          this.stackSimpleDatai.FLAG = res.data.map((item) => {
+            return parseInt(item.FLAG)
+          })
+          // console.log(this.stackSimpleDatai,"000");
+          if(this.switchValue){
+            this.$nextTick(() => { 
+                  this.$refs.se.draw();
+            });
+          }
+          
+        
       })
     },
 
@@ -431,7 +517,6 @@ export default {
           return parseInt(item.WCBFB)
         })
 
-        // console.log(this.stackData,'this.stackData');
       })
     },
     //获取更新饼形图辖区分级数据
@@ -448,22 +533,28 @@ export default {
         this.isShowThi = true
         this.mapItem = 'review1'
         this.getGspInfo({ vYaer: this.pickYear })
+        this.switchValue = false
+
         // this.getStackThi({vYaer:this.pickYear})
       } else {
         if (val == '专项检查') {
           this.isShowFri = false
           this.isShowSec = true
           this.isShowThi = false
-          // this.getPlanInfo({ vYaer: this.pickYear })
+          
           this.getBarFri({ vYaer: this.pickYear, vCategory: val })
-          this.getMixSec({ vYaer: this.pickYear })
+          this.getMixSec({ vYaer: this.formSpecial.year.getFullYear(),vLevel: 1 })
         } else {
           this.isShowFri = true
           this.isShowSec = false
           this.isShowThi = false
+          this.switchValue = false
+
           this.getLineInfo({ vCategory: val })
           this.getBarFri({ vYaer: this.pickYear, vCategory: val })
         }
+        this.switchValue = false
+
         this.mapItem = 'review'
         this.getMapInfo({ vYaer: this.pickYear, vCategory: val })
       }
@@ -482,13 +573,26 @@ export default {
       // this.isShowIcon = true
     },
     changeShowIcon(val) {
-      console.log(val)
       // this.isShowIcon = val
     },
     /* 柱形图事件 end*/
     onSubmit(param) {
-      console.log(this.formSpecial)
-      const yy = this.formSpecial.year.getFullYear();
+      this.$refs[param].validate((valid) => {
+        if (valid) {
+          
+          const yy = this.formSpecial.year.getFullYear();
+          this.getPlanInfo({ vYaer: yy,vPlanId: this.formSpecial.plan })
+
+          // this.getMixSec({ vYaer: yy,vLevel: 3, vPlanId: this.formSpecial.plan })
+          // this.isShowSecCh = true
+        } else {
+          // console.log('error submit!!');
+          return false;
+        }
+      });
+      // this.isShowSecCh = true
+
+      
       
     }
   }
@@ -496,6 +600,64 @@ export default {
 </script>
 
 <style scoped lang="less">
+  ::v-deep { 
+
+    .el-input__inner {
+      background-color: rgba(166, 255, 0, 0) !important;
+      border:1px transparent solid;
+      border-image:linear-gradient(to right,rgba(4,127,156,1),#e9eceb,#01cfff) 1 10;
+      box-shadow: 0px 0px 3px 1px #01cfff;
+      z-index: 10;
+      color: #fff;
+      font-size: 16px;
+      width: 180px;
+      text-align: left;
+    }
+    .el-select-dropdown {
+      background-color: rgba(20, 74, 116, 0.322);
+      .el-scrollbar{
+        background-color: rgba(9, 39, 61, 0.87);
+        color: #fff !important;
+        border:1px transparent solid;
+        border-image:linear-gradient(to right,rgba(4,127,156,1),#e9eceb,#01cfff) 1 10;
+        box-shadow: 0px 0px 3px 1px #01cfff;
+        .el-scrollbar__view {
+          color: #fff !important;
+          .el-select-dropdown__item {
+            font-size: 16px;
+            text-align: left;
+            color: #fff !important;
+          }
+          .hover {
+            background-image: linear-gradient(to right,rgba(2,157,193,1), rgb(3, 64, 110)) !important;
+          }
+          .selected {
+            font-weight: bold;
+            color: #00efff !important;
+          }
+        }
+      }
+    } 
+    .el-picker-panel {
+      background-color: rgba(20, 74, 116, 0.322) !important;
+      .el-picker-panel__body-wrapper {
+        background-color: rgba(9, 39, 61, 0.87) !important;
+
+      }
+    }
+  }
+/deep/ .el-picker-panel {
+      background-color: rgba(20, 74, 116, 0.322) !important;
+      .el-picker-panel__body-wrapper {
+        background-color: rgba(9, 39, 61, 0.87) !important;
+      }
+    }  
+.yselect {
+    background-color: rgba(20, 74, 116, 0.322) !important;
+    .el-picker-panel__body-wrapper {
+      background-color: rgba(9, 39, 61, 0.87) !important;
+    }
+}    
 .review {
   .el-row,
   .el-col {
@@ -663,6 +825,16 @@ export default {
     }
     &-pie {
       margin-bottom: 15px;
+      /deep/ .card-header {
+        justify-content: flex-start !important;
+        .card-header-title {
+          margin-bottom: 0px;
+        }
+        .el-switch {
+          margin-left: 20px;
+          margin-right: 35px;
+        }
+      }
     }
   }
 }

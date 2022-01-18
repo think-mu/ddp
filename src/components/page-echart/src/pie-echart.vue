@@ -43,7 +43,9 @@ export default {
   data() {
     return {}
   },
-  mounted() {},
+  mounted() {
+    this.test()
+  },
   computed: {
     options() {
       return {
@@ -111,7 +113,7 @@ export default {
               position: 'outside',
               color: '#fff',
               fontSize: 16,
-              alignTo: 'labelLine', // 'labelLine'：label line 的末端对齐，其中最短的长度由 labelLine.length2 决定
+              // alignTo: 'labelLine', // 'labelLine'：label line 的末端对齐，其中最短的长度由 labelLine.length2 决定
               formatter: function (params) {
                 // return params.name + '-' + params.value + '家'
                 // return '{txt|'+params.value + '家'+'}';
@@ -149,8 +151,8 @@ export default {
             labelLine: {
               show: true,
               showAbove: true,
-              length2: 50,
-              minTurnAngle: 120,
+              length2: 60,
+              // minTurnAngle: 120,
               lineStyle: {
                 width: 2,
               } 
@@ -173,6 +175,9 @@ export default {
   methods: {
     pieClick(param) {
       this.$emit('pieClick', param)
+    },
+        test() {
+      console.log(this.stackData,"se");
     }
   }
 }

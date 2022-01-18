@@ -172,7 +172,6 @@ import { levelData,convertData } from '@/utils/convert-data'
       /* 饼形图事件 start*/
       //全市分级饼形图--点击事件
       pieSelect(param) {
-        console.log(param,"并行");
         this.getPieInfo(param)
         
       },
@@ -181,10 +180,8 @@ import { levelData,convertData } from '@/utils/convert-data'
       /* 柱形图事件 start*/
       barSelect(param) {
         this.getBarInfo(param)
-        console.log(param, '柱形图')
       },
       changeShowIcon(val) {
-        console.log(val)
         this.isShowIcon = val
       }
       /* 柱形图事件 end*/

@@ -94,7 +94,7 @@ import { levelData,convertData } from '@/utils/convert-data'
           year: 2021,
           type: 'T01',
           level: 2,
-          classname: "零售药店"
+          classname: ""
         }
         categoryInfo(qs.stringify(data)).then((res) => {
           this.mapData = levelData(res.data)
@@ -109,7 +109,7 @@ import { levelData,convertData } from '@/utils/convert-data'
           year: 2021,
           type: 'T01',
           level: 3,
-          classname: "零售药店"
+          classname: ""
         }
         categoryInfo(qs.stringify(data)).then((res) => {
           this.pieAllData = res.data.map((item) => {

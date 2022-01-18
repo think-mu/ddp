@@ -85,7 +85,7 @@ export default {
       pieAllData: [], //饼图数据
       pieAreaData: [],
       pieTitle1: '各类型药品企业数量', //各类型药品企业数量饼图title
-      pieTitle2: '药品生产企业数量',
+      pieTitle2: '',
       xData: [], //柱形图x轴数据
       xData1: [],
       yData: [], //柱形图y轴数据
@@ -100,9 +100,11 @@ export default {
   },
   created() {
     //获取图表数据
+    // this.$nextTick(() => { 
+      // this.getPieAraeData('连锁门店')
+    // });
     this.getMapData()
     this.getPieAllData()
-    this.getPieAraeData('药品生产企业')
     this.getTotalData()
   },
   mounted() {},
@@ -156,6 +158,10 @@ export default {
             value: item.NUM
           }
         })
+        this.$nextTick(() => { 
+          this.getPieAraeData(this.pieAllData[0].name)
+          this.pieTitle2=this.pieAllData[0].name+'数量'
+        });
         //更新柱形图x轴值
         this.xData = res.data.map((item) => {
           return {
@@ -233,7 +239,6 @@ export default {
 
     /* 柱形图事件 start*/
     barClick(param) {
-      console.log(param);
       this.bTotal = param.value
       this.getBarAraeData(param.name)
       this.aLabel = param.name+"总数（家）"

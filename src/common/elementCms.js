@@ -40,6 +40,7 @@ import {
   Row,
   Col,
   DatePicker,
+  Switch,
  } from 'element-ui';
 
 export default Vue => {
@@ -82,6 +83,7 @@ export default Vue => {
   Vue.use(Row);
   Vue.use(Col);
   Vue.use(DatePicker);
+  Vue.use(Switch);
   Vue.prototype.$msgbox = MessageBox
   Vue.prototype.$message = Message
   Vue.prototype.$alert = MessageBox.alert

@@ -26,7 +26,9 @@ export default {
     return {}
   },
   mounted() {
-    this.draw()
+    this.$nextTick(() => {
+      this.draw()
+    })
   },
   methods: {
     draw() {
@@ -66,11 +68,18 @@ export default {
       //         let xIndex = echartInstance.convertFromPixel({ seriesIndex: 0 }, [params.offsetX,params.offsetY])[0];//柱形的下标 ，此处取[0]
       //     } */
       // });
+      // echartInstance.clear()
+      
+      // echartInstance.setOption(this.options,true)
+      // echartInstance.refresh(); 
+
       setTimeout(() => {
         try {
+          // echartInstance.clear()
             echartInstance.setOption(this.options,true)
         } catch (error) {}
       }, 1000) //加延时,先获取数据在加载图表.
+
       window.addEventListener('resize', () => {
         echartInstance.resize()
       })
@@ -80,8 +89,14 @@ export default {
     options: { 
       deep:true,
       handler(newVal, oldVal) {
+        // console.log(newVal, oldVal,"testtt");
         this.draw()
-      }
+        // this.$nextTick(() => {
+        //   this.draw()
+        // })
+      },
+      
+
     }
   },
 }
