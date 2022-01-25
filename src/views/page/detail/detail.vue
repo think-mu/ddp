@@ -168,6 +168,9 @@ export default {
             value: item.COMPANY_TYPE
           }
         })
+        let arr = [{value:"全部"}].concat(this.xData)
+        this.$store.commit('changeTypeValue', arr)
+
         //更新柱形图y轴值
         this.yData = res.data.map((item) => {
           return {

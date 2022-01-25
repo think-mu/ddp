@@ -11,26 +11,39 @@
               ></el-radio-button>
             </el-radio-group>
           </div>
-          <!-- <div class="board-data">
-            <div
-              class="board-data-item"
-              v-for="(item, index) in totalData"
-              :key="index"
-            >
-              <i :class="item.icon"></i>
-              <div class="board-data-item-content">
-                <span>{{ item.name }}</span>
-                <span>{{ item.num }}</span>
-              </div>
-            </div>
-          </div> -->
         </div>
-        <s-card title="全市监督检查情况" class="map">
+        <s-card :title="titleLabel1" class="map">
+          <template v-slot:select >
+            <el-date-picker
+              v-model="mapYear"
+              type="year"
+              :clearable="false"
+              popper-class="yselect"
+              :picker-options="mapOptions"
+              :popper-append-to-body="false"
+              @change="changeMapYear"
+              placeholder="选择年份">
+            </el-date-picker>
+          </template>
           <div class="map-hd">
-            <ul v-for="(item, index) in totalData" :key="index">
+            <ul>
               <li>
-                <span>{{ item.num }}</span
-                ><span>{{ item.name }}</span>
+                <span>{{ totalData[0].FHS }}</span><span>符合数</span>
+              </li>
+            </ul>  
+            <ul>
+              <li>
+                <span>{{ totalData[0].JCS }}</span><span>检查数</span>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <span>{{ totalData[0].BFHS }}</span><span>不符合数</span>
+              </li>
+            </ul>  
+            <ul>  
+              <li>
+                <span>{{ totalData[0].ZGS }}</span><span>整改数</span>
               </li>
             </ul>
           </div>
@@ -43,12 +56,38 @@
         </s-card>
       </el-col>
       <el-col :span="12" class="content-right">
-        <s-card title="监督检查情况" class="content-right-pie">
-          <template v-slot:select v-if="isShowSec">
+        <s-card :title="titleLabel2" class="content-right-pie">
+
+          <template v-slot:select v-if="isShowSec||isShowThi">
             <el-switch
               v-model="switchValue"
+              v-if="isShowSec"
               >
             </el-switch>
+            <el-date-picker
+              class="content-right-pie-gsp"
+              v-if="isShowThi"
+              v-model="stackYear"
+              type="year"
+              :clearable="false"
+              popper-class="yselect"
+              :picker-options="stackOptions"
+              :popper-append-to-body="false"
+              @change="changeStackYear"
+              placeholder="选择年份">
+            </el-date-picker>
+            <el-date-picker
+              v-if="!switchValue && isShowSec"
+              v-model="mixYear"
+              type="year"
+              :clearable="false"
+              popper-class="yselect"
+              :picker-options="mixOptions"
+              :popper-append-to-body="false"
+              @change="changeMixYear"
+              placeholder="选择年份">
+            </el-date-picker>
+
             <el-form
               v-if="switchValue"
               :inline="true"
@@ -59,9 +98,6 @@
               ref="ruleForm"
             >
               <el-form-item label-width="80" prop="year">
-                <!-- <el-select v-model="formSpecial.year" placeholder="年度">
-                  <el-option label="2021" value="2021"></el-option>
-                </el-select> -->
                 <el-date-picker
                   v-model="formSpecial.year"
                   type="year"
@@ -103,11 +139,11 @@
           ></mix-echart>
           <stack-echart
             height="325px"
+            ref="stackRef"
             @pieClick="pieClick"
             :stackData="stackData"
             v-if="isShowThi"
           ></stack-echart>
-          <!-- <h1 v-if="isShowSecCh">test</h1> -->
           <stack-simple-echart-se
             ref="se"
             height="325px"
@@ -117,10 +153,22 @@
           ></stack-simple-echart-se>
         </s-card>
         <s-card
-          title="监督检查情况"
+          :title="titleLabel2"
           :isShowIcon="isShowIcon"
           @changeShowIcon="changeShowIcon"
         >
+          <template v-slot:select >
+            <el-date-picker
+              v-model="barYear"
+              type="year"
+              :clearable="false"
+              popper-class="yselect"
+              :picker-options="barOptions"
+              :popper-append-to-body="false"
+              @change="changeBarYear"
+              placeholder="选择年份">
+            </el-date-picker>
+          </template>
           <multi-bar-echart
             height="325px"
             :source="source"
@@ -138,6 +186,7 @@
 
           <stack-simple-echart
             height="325px"
+            ref="gspRef"
             @pieClick="pieClick"
             :stackData="stackSimpleData"
             v-if="isShowThi"
@@ -179,6 +228,9 @@ export default {
   },
   data() {
     return {
+      titleLabel1:'日常检查全市情况',
+      titleLabel2:'日常检查监督情况',
+      titleLabel3:'日常检查监督情况',
       switchValue: false,
       btnName: [
         '日常检查',
@@ -197,7 +249,12 @@ export default {
       yData: [], //柱形图y轴数据
       yData1: [],
       isShowIcon: false, //是否现实柱形图返回按钮
-      totalData: [],
+      totalData: [{
+        FHS: 0,
+        BFHS: 0,
+        JCS: 0,
+        ZGS: 0
+      }],
       radio: '日常检查', //业务按钮选中值
       pickYear: 2021,
       mapItem: 'review',
@@ -235,14 +292,7 @@ export default {
       ],
       planData:[],
       // timeDefaultShow: new Date('2021'),
-      pickerOptions: {
-        disabledDate(time) {
-          return (
-            time.getTime() > Date.now() ||
-            time.getTime() < new Date('2021')
-          )
-        },
-      },
+
       rules:{
         year: [
           { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
@@ -250,7 +300,28 @@ export default {
         plan: [
           { required: true, message: '请选择方案', trigger: 'change' }
         ],
-      }//表单验证规则
+      },//表单验证规则
+      mapYear: new Date('2021'), //地图年份选择器值
+      barYear: new Date('2021'),
+      mixYear: new Date('2021'),
+      stackYear: new Date('2021'),
+      mixOptions:{
+         disabledDate(time) {
+            return (  //Date.now()
+              time.getTime() > Date.now() ||
+              time.getTime() < new Date('2021')
+            )
+          },
+      },
+      stackOptions:{
+         disabledDate(time) {
+            return (  //Date.now()
+              time.getTime() > new Date('2021') ||
+              time.getTime() < new Date('2019')
+            )
+          },
+      }
+      // mapOptions: this.getOption()
 
     }
   },
@@ -262,43 +333,124 @@ export default {
     this.getBarFri()
     this.getLineInfo()
     this.getStackThi()
-    this.getMixSec({ vYaer: this.pickYear,vLevel: 2 })
+    this.getMixSec({ vYaer: this.mapYear.getFullYear(),vLevel: 2 })
     // this.getLevelInfo()
     // this.getPieAraeData('A')
   },
-  // computed: {
-  //   btnStatus() {
-  //     if(this.formSpecial.plan&&this.formSpecial.year) {
-  //       return true
-  //     }else {
-  //       return false
-  //     }
+  computed: {
+    // btnStatus() {
+    //   if(this.formSpecial.plan&&this.formSpecial.year) {
+    //     return true
+    //   }else {
+    //     return false
+    //   }
       
-  //   }
-  // },
+    // },
+
+    pickerOptions() {
+      let that = this
+      return{ 
+        disabledDate:(time)=> {
+          return (
+            time.getTime() > Date.now() ||
+            time.getTime() < new Date('2021')
+          )
+        },
+      }
+    },
+      mapOptions() {
+        let that = this
+        return{ 
+          disabledDate:(time)=> {
+            if(that.radio == '日常检查'||that.radio == '有因检查'||that.radio == '飞行检查'){
+              return (
+                time.getTime() > Date.now() ||
+                time.getTime() < new Date('2016')
+              )
+            }else if (that.radio == '专项检查'){
+               return (
+                time.getTime() > Date.now() ||
+                time.getTime() < new Date('2021')
+              ) 
+            }else if (that.radio == '零售药店GSP跟踪检查'){
+               return (
+                time.getTime() > new Date('2021') ||
+                time.getTime() < new Date('2019')
+              ) 
+            }  
+            
+          },
+        }
+      },
+      barOptions() {
+        let that = this
+        return{ 
+          disabledDate:(time)=> {
+            if(that.radio == '日常检查'||that.radio == '有因检查'||that.radio == '飞行检查'){
+              return (
+                time.getTime() > Date.now() ||
+                time.getTime() < new Date('2016')
+              )
+            }else if (that.radio == '专项检查'){
+               return (
+                time.getTime() > Date.now() ||
+                time.getTime() < new Date('2021')
+              ) 
+            }else if (that.radio == '零售药店GSP跟踪检查'){
+               return (
+                time.getTime() > new Date('2021') ||
+                time.getTime() < new Date('2019')
+              ) 
+            }  
+            
+          },
+        }
+      },
+  },
   methods: {
+    // getOption() {
+    //     let that = this
+    //     console.log(that.radio,"xxx");
+
+    //     return{ 
+          
+    //       disabledDate:(time)=> {
+    //         if(that.radio == '日常检查'){
+    //           console.log(that.radio,"xxx1");
+
+    //           return (
+    //             time.getTime() > Date.now() ||
+    //             time.getTime() < new Date('2016')
+    //           )
+    //         }else if (that.radio == '专项检查'){
+    //           console.log(that.radio,"xxx2");
+    //            return (
+    //             time.getTime() > Date.now() ||
+    //             time.getTime() < new Date('2021')
+    //           ) 
+    //         } 
+            
+    //       },
+    //     }
+    // },
     /* 数据获取 start */
     //今日统计数据
-    getTotalData() {
+    getTotalData({ vCategory = '日常检查' } = {}) {
       const data = {
         region: '',
         action: 'today',
         type: 'T01',
-        model: 1
+        model: 1,
+        category: vCategory
       }
       dataTotal(qs.stringify(data)).then((res) => {
         let titleArr = ['符合数', '整改数', '检查数', '不符合数']
-        let iconArr = [
-          'el-icon-s-claim',
-          'el-icon-warning-outline',
-          'el-icon-search',
-          'el-icon-s-release'
-        ]
-        let obj = res.data[0]
-        delete obj.ID
-        this.totalData = Object.values(obj).map((item, index) => {
-          return { num: item, name: titleArr[index], icon: iconArr[index] }
-        })
+        this.totalData = res.data 
+        // let obj = res.data[0]
+        // delete obj.ID
+        // this.totalData = Object.values(obj).map((item, index) => {
+        //   return { num: item, name: titleArr[index], icon: iconArr[index] }
+        // })
       })
     },
     //获取地图数据
@@ -471,7 +623,7 @@ export default {
     },
 
     //获取堆积图数据
-    getStackThi({ vYaer = 2021 } = {}) {
+    getStackThi({ vYaer = 2021,pickId='' } = {}) {
       const data = {
         region: '',
         action: 'gsp',
@@ -516,7 +668,16 @@ export default {
         this.stackSimpleData.WCBFB = res.data.map((item) => {
           return parseInt(item.WCBFB)
         })
-
+       if(pickId==1){
+          this.$nextTick(() => { 
+                this.$refs.gspRef.draw();
+          });
+        }
+        if(pickId==2){
+          this.$nextTick(() => { 
+                this.$refs.stackRef.draws();
+          });
+        }
       })
     },
     //获取更新饼形图辖区分级数据
@@ -527,22 +688,28 @@ export default {
 
     // 业务按钮选择事件
     selectItem(val) {
+      this.titleLabel1 = val+'全市情况'
+      this.titleLabel2 = val+'监督情况'
+      this.titleLabel3 = val+'监督情况'
+      this.mapYear = new Date('2021')
+      this.barYear = new Date('2021')
+      this.getTotalData({ vCategory: val })
       if (val == '零售药店GSP跟踪检查') {
         this.isShowFri = false
         this.isShowSec = false
         this.isShowThi = true
         this.mapItem = 'review1'
-        this.getGspInfo({ vYaer: this.pickYear })
+        this.getGspInfo({ vYaer: this.mapYear.getFullYear() })
+        
+        this.getStackThi({vYaer:this.barYear.getFullYear()})
         this.switchValue = false
-
-        // this.getStackThi({vYaer:this.pickYear})
+   
       } else {
         if (val == '专项检查') {
           this.isShowFri = false
           this.isShowSec = true
           this.isShowThi = false
           
-          this.getBarFri({ vYaer: this.pickYear, vCategory: val })
           this.getMixSec({ vYaer: this.formSpecial.year.getFullYear(),vLevel: 1 })
         } else {
           this.isShowFri = true
@@ -551,12 +718,11 @@ export default {
           this.switchValue = false
 
           this.getLineInfo({ vCategory: val })
-          this.getBarFri({ vYaer: this.pickYear, vCategory: val })
         }
         this.switchValue = false
-
+        this.getBarFri({ vYaer: this.barYear.getFullYear(), vCategory: val })
         this.mapItem = 'review'
-        this.getMapInfo({ vYaer: this.pickYear, vCategory: val })
+        this.getMapInfo({ vYaer: this.mapYear.getFullYear(), vCategory: val })
       }
     },
     /* 饼形图事件 start*/
@@ -591,10 +757,30 @@ export default {
         }
       });
       // this.isShowSecCh = true
+    },
+    //年份选择器 回调函数
+    changeMapYear(param) {
+      if(this.radio == '零售药店GSP跟踪检查'){
+        this.getGspInfo({ vYaer: param.getFullYear() })
+      }else{
+        this.getMapInfo({ vYaer: param.getFullYear(), vCategory: this.radio })
+      }
+    },
+    changeBarYear(param) {
+      if(this.radio == '零售药店GSP跟踪检查'){
 
-      
-      
-    }
+        this.getStackThi({vYaer:param.getFullYear(),pickId:1})
+      }else{
+        this.getBarFri({ vYaer: param.getFullYear(), vCategory: this.radio })
+      }
+    },
+    changeMixYear(param) {
+      this.getMixSec({ vYaer: param.getFullYear(), vLevel: 1 })
+    },
+    changeStackYear(param) {
+      this.getStackThi({vYaer:param.getFullYear(),pickId:2})
+    },
+    
   }
 }
 </script>
@@ -834,6 +1020,9 @@ export default {
           margin-left: 20px;
           margin-right: 35px;
         }
+      }
+      &-gsp {
+        margin-left: 60px;
       }
     }
   }

@@ -36,6 +36,7 @@ export default {
   methods: {
     getUserMenus() {
       // this.$store.commit('changeUserMenus', userMenus)
+      // window.location.reload()
       this.$store.dispatch('saveMenus', userMenus)
     }
   }

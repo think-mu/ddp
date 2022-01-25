@@ -1,7 +1,7 @@
 module.exports = {
   // publicPath: './',
-  // publicPath: process.env.NODE_ENV === 'production' ? '/dist' : '/' ,
-  publicPath: process.env.NODE_ENV === 'production' ? './' : '/' ,
+  publicPath: process.env.NODE_ENV === 'production' ? '/dist' : '/' ,
+  // publicPath: process.env.NODE_ENV === 'production' ? './' : '/' ,
   // outputDir: './build',
   configureWebpack: {
     resolve: {

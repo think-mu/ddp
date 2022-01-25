@@ -3,7 +3,7 @@
     <img src="~assets/img/logo.png" alt="" />
     <!-- <span>药品展示平台</span>  -->
     <div class="content">
-      <div class="title"><span>药品展示平台</span></div>
+      <div class="title"><span>药品监管展示平台</span></div>
       <!-- <div class="crumbs">面包屑</div> -->
       <!-- <div class="info">用户信息</div> -->
     </div>

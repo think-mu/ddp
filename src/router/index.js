@@ -22,11 +22,11 @@ const routes = [
     name: 'main',
     component: main
   },
-/*   {
-    path: '/*',
-    name: 'not-found',
-    component: () => import('views/not-found/not-found') 
-  } */
+  // {
+  //   path: '/*',
+  //   name: 'not-found',
+  //   component: () => import('views/not-found/not-found') 
+  // }
 ]
 
 const router = new VueRouter({

@@ -8,7 +8,8 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    userMenus: []
+    userMenus: [],
+    typeValue: [],
   },
   mutations: {
     changeUserMenus(state, userMenus) {
@@ -20,6 +21,9 @@ const store = new Vuex.Store({
       routes.forEach((route) => {
         router.addRoute('main', route)
       })
+    },
+    changeTypeValue(state, param) {
+      state.typeValue = param
     }
   },
   actions: {

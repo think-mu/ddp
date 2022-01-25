@@ -20,56 +20,37 @@ export function toolHtmlII(params) {
       padding: 20px 25px; border:1px transparent solid;border-image:linear-gradient(to right,rgba(4,127,156,1),#e9eceb,#01cfff) 1 10; border-radius: 2px;
       \'>
     <div style=\'text-align:center; font-size: 20px;color: #fff;;letter-spacing: 0;padding: 0px;\'> ${params.name}</div>
-    <div style=\'display: flex;flex-direction: column;align-items: center;\'>
-      <div style=\'font-size: 15px;color: #00efff;text-align:center;margin-top: 16px;\'>
-        <div>
-          <span style=\'text-align:center;font-size: 24px; font-weight: bold;color:#00efff;\'>
-            ${params.data.value[2].A} 
-          </span> 家
-        </div>  
-        <div style=\'color:#fff; font-size: 18px; margin-top: 5px;\'>
+    <div style=\'display: flex;flex-direction: column;align-items: left;\'>
+
+      <div style=\'font-size: 18px;color: #fff;display:flex; justify-content:space-between;text-align:center;margin-top: 20px;\'>
         <span>A级</span>
-        </div>
+        <span style=\'text-align:center;font-size: 24px;font-weight: bold;color:#00efff;\'>
+          ${params.data.value[2].A}家
+        </span> 
       </div>
-      <div style=\'font-size: 15px;color: #00efff;text-align:center;margin-top: 12px;\'>
-        <div>
-          <span style=\'text-align:center;font-size: 24px; font-weight: bold;color:#00efff;\'>
-            ${params.data.value[2].B} 
-          </span> 家
-        </div>  
-        <div style=\'color:#fff; font-size: 18px; margin-top: 5px;\'>
+      <div style=\'font-size: 18px;color: #fff;display:flex; justify-content:space-between;text-align:center;margin-top: 20px;\'>
         <span>B级</span>
-        </div>
+        <span style=\'text-align:center;font-size: 24px;font-weight: bold;color:#00efff;\'>
+          ${params.data.value[2].B}家
+        </span> 
       </div>
-      <div style=\'font-size: 15px;color: #00efff;text-align:center;margin-top: 12px;\'>
-        <div>
-          <span style=\'text-align:center;font-size: 24px; font-weight: bold;color:#00efff;\'>
-            ${params.data.value[2].C} 
-          </span> 家
-        </div>  
-        <div style=\'color:#fff; font-size: 18px; margin-top: 5px;\'>
+      <div style=\'font-size: 18px;color: #fff;display:flex; justify-content:space-between;text-align:center;margin-top: 20px;\'>
         <span>C级</span>
-        </div>
+        <span style=\'text-align:center;font-size: 24px;font-weight: bold;color:#00efff;\'>
+          ${params.data.value[2].C}家
+        </span> 
       </div>
-      <div style=\'font-size: 15px;color: #00efff;text-align:center;margin-top: 12px;\'>
-        <div>
-          <span style=\'text-align:center;font-size: 24px; font-weight: bold;color:#00efff;\'>
-            ${params.data.value[2].D} 
-          </span> 家
-        </div>  
-        <div style=\'color:#fff; font-size: 18px; margin-top: 5px;\'>
+      <div style=\'font-size: 18px;color: #fff;display:flex; justify-content:space-between;text-align:center;margin-top: 20px;\'>
         <span>D级</span>
-        </div>
+        <span style=\'text-align:center;font-size: 24px;font-weight: bold;color:#00efff;\'>
+          ${params.data.value[2].D}家
+        </span> 
       </div>
-      <div style=\'font-size: 15px;color: #00efff;text-align:center;margin-top: 12px;\'>
-        <div>
-          <span style=\'text-align:center;font-size: 24px; font-weight: bold;color:#00efff;\'>
-            ${params.data.value[2]['未评级']} 
-          </span> 家
-        </div>  
-        <div style=\'color:#fff; font-size: 18px; margin-top: 5px;\'>
-        <span>未评级级</span>
-        </div>
+      <div style=\'font-size: 18px;color: #fff;display:flex; justify-content:space-between;text-align:center;margin-top: 20px;\'>
+        <span>未评级</span>
+        <span style=\'text-align:center;font-size: 24px;font-weight: bold;color:#00efff;\'>
+          ${params.data.value[2]['未评级']}家
+        </span> 
       </div>
     </div>
   </div>`

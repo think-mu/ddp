@@ -4,7 +4,6 @@ let TIME_OUT = 10000
 if (process.env.NODE_ENV === 'development') {
   BASE_URL = '/api'
 }else if(process.env.NODE_ENV === 'production') {
-  console.log("生产");
   BASE_URL = 'http://rcjg.gzfda.gov.cn'
   // BASE_URL = 'http://10.194.145.5'
 }else{

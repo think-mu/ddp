@@ -35,15 +35,17 @@ export const levelData = function (data) {
   let arr = []  
   let dataInfo = {};
   data.forEach((item, index) => {
-    let { REGION,ID } = item;
-    if (!dataInfo[REGION]) {
-      dataInfo[REGION] = [
-        {REGION: item.REGION}
+    let { REGIONNAME,CREDIT_CLASS } = item;
+    if (!dataInfo[REGIONNAME]) {
+      dataInfo[REGIONNAME] = [
+        {REGIONNAME: item.REGIONNAME}
       ]
     }
+
     let obj = {}
-    obj[ID] = item.NUM,
-    dataInfo[REGION].push(obj);
+    
+    obj[CREDIT_CLASS] = item.NUM,
+    dataInfo[REGIONNAME].push(obj);
   });
   let level = ["A","B","C","D","未评级"]
   arr = Object.values(dataInfo).map((item)=> {
@@ -57,18 +59,18 @@ export const levelData = function (data) {
       return obj
   }) 
   let rArr = arr.map((item) => {
-    return item.REGION
+    return item.REGIONNAME
   })  
   areaData.forEach((item,index) => {
       if(rArr.indexOf(item)==-1){
-        arr.push({REGION:item,A:0,B:0,C:0,D:0,"未评级":0})
+        arr.push({REGIONNAME:item,A:0,B:0,C:0,D:0,"未评级":0})
       }
   })
   arr.forEach((item)=> {
-    const geoCoord = coordinateData[item.REGION]
+    const geoCoord = coordinateData[item.REGIONNAME]
     if (geoCoord) {
       res.push({
-        name: item.REGION,
+        name: item.REGIONNAME,
         value: [].concat(item)
       })
     }

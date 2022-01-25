@@ -44,7 +44,7 @@ export default {
     return {}
   },
   mounted() {
-    this.test()
+    // this.test()
   },
   computed: {
     options() {

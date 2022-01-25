@@ -1,10 +1,12 @@
 <template>
   <div class="stack-chart">
-    <base-echart
+    <!-- <base-echart
       :options="options"
       :height="height"
       @pieClick="barClick"
-    ></base-echart>
+    ></base-echart> -->
+    <div id="sc" style="width: 100%;height: 325px;"></div>
+    
   </div>
 </template>
 
@@ -50,10 +52,25 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() {
+    this.$nextTick(function() {
+        this.draws()
+    })
+  },
   computed: {
     options() {
       return {
+        
+      }
+    }
+  },
+  methods: {
+    barClick(param) {
+      this.$emit('barClick', param)
+    },
+    draws() {
+      this.charts = echarts.init(document.getElementById('sc'))
+      this.charts.setOption({
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -172,13 +189,10 @@ export default {
             itemStyle: this.optionItemStyle('rgb(255,105,0)','rgba(255,105,0,.5)'),
             data: this.stackData.TY
           }
-        ]
-      }
-    }
-  },
-  methods: {
-    barClick(param) {
-      this.$emit('barClick', param)
+        ]},true)
+      window.addEventListener('resize', () => {
+        this.charts.resize()
+      }) 
     }
   }
 }
