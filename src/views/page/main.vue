@@ -31,13 +31,13 @@ export default {
     return {}
   },
   created() {
-    this.getUserMenus()
+    // this.getUserMenus()
   },
   methods: {
     getUserMenus() {
       // this.$store.commit('changeUserMenus', userMenus)
       // window.location.reload()
-      this.$store.dispatch('saveMenus', userMenus)
+      // this.$store.dispatch('saveMenus', userMenus)
     }
   }
 }

@@ -30,7 +30,6 @@ export const convertData = function (data) {
 }
 //重构分类分级地图数据
 export const levelData = function (data) {
-  // console.log(data);
   let res = []
   let arr = []  
   let dataInfo = {};
@@ -41,9 +40,7 @@ export const levelData = function (data) {
         {REGIONNAME: item.REGIONNAME}
       ]
     }
-
     let obj = {}
-    
     obj[CREDIT_CLASS] = item.NUM,
     dataInfo[REGIONNAME].push(obj);
   });
@@ -77,5 +74,54 @@ export const levelData = function (data) {
   })
 
   // console.log(arr,"level");
+  return res
+}
+
+//重构企业情况地图数据
+export const typeData = function(data) {
+  let res = []
+  let arr = []  
+  let dataInfo = {};
+  data.forEach((item, index) => {
+    let { REGION,CLASS_NAME } = item;
+    if (!dataInfo[REGION]) {
+      dataInfo[REGION] = [
+        {REGION: item.REGION}
+      ]
+    }
+    let obj = {}
+    obj[CLASS_NAME] = item.NUM,
+    dataInfo[REGION].push(obj);
+  });
+  
+  let type = ["零售药店","药品生产企业","连锁门店","医疗机构","连锁总部","药品批发企业"]
+  arr = Object.values(dataInfo).map((item)=> {  //增加缺省类型的数据值
+    return Object.assign({}, ...item);
+  }).map((obj)=> {
+    type.forEach((item) => {
+      if (!obj.hasOwnProperty(item)){
+        obj[item] = 0
+      }
+    })
+      return obj
+  }) 
+  let rArr = arr.map((item) => {  //提取数据中的区域集合
+    return item.REGION
+  }) 
+  areaData.forEach((item,index) => {  //增加缺省区域默认数据
+    if(rArr.indexOf(item)==-1){
+      arr.push({REGION:item,"零售药店":0,"药品生产企业":0,"连锁门店":0,"医疗机构":0,"连锁总部":0,"药品批发企业":0})
+    }
+  })
+  arr.forEach((item)=> {
+    const geoCoord = coordinateData[item.REGION]
+    if (geoCoord) {
+      res.push({
+        name: item.REGION,
+        value: [].concat(item)
+      })
+    }
+  })
+  console.log(res,"---d01---");
   return res
 }

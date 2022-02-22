@@ -71,6 +71,8 @@ import PieEchart from '@/components/page-echart/src/pie-echart'
 import BarEchart from '@/components/page-echart/src/bar-echart'
 import MapEchart from '@/components/page-echart/src/map-echart'
 import { entInfo, dataTotal } from 'service/main/detail/detail'
+import { typeData } from '@/utils/convert-data'
+
 
 export default {
   name: '',
@@ -133,12 +135,14 @@ export default {
         classname: ''
       }
       entInfo(qs.stringify(data)).then((res) => {
-        this.mapData = res.data.map((item) => {
-          return {
-            name: item.REGION,
-            value: item.NUM
-          }
-        })
+        // console.log(,"---ddd---");
+        this.mapData=typeData(res.data)
+        // this.mapData = res.data.map((item) => {
+        //   return {
+        //     name: item.REGION,
+        //     value: item.NUM
+        //   }
+        // })
       })
     },
     //获取全市各类型企业数量

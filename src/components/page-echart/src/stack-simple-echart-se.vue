@@ -301,6 +301,7 @@ export default {
               }
             },
             axisLabel: {
+              interval: 0,
               fontSize: 14
             }
           

@@ -1,14 +1,45 @@
 export function toolHtmlI(params) {
   const resultTooltip = 
   `<div style=\'background-image: linear-gradient(to right,rgba(2,157,193,1), rgba(0,29,90,.9)) !important; 
-      padding: 12px 20px; border:1px transparent solid;border-image:linear-gradient(to right,rgba(4,127,156,1),#e9eceb,#01cfff) 1 10; border-radius: 2px;
+      padding: 20px 25px; border:1px transparent solid;border-image:linear-gradient(to right,rgba(4,127,156,1),#e9eceb,#01cfff) 1 10; border-radius: 2px;
       \'>
-    <div style=\'text-align:center;margin-top: 5px; font-size: 20px;color: #fff;;letter-spacing: 0;padding: 0px;\'> ${params.name}</div>
-    <div style=\'\'>
-      <div style=\'font-size: 15px;color: #00efff;text-align:center;margin-top: 16px;\'>
-        <span style=\'text-align:center;font-size: 24px; font-weight: bold;color:#00efff;\'>
-          ${params.data.value[2]} 
-        </span> 家
+    <div style=\'text-align:center;font-size: 20px;color: #fff;;letter-spacing: 0;padding: 0px;\'> ${params.name}</div>
+    <div style=\'display: flex;flex-direction: column;align-items: left;\'>
+      <div style=\'font-size: 18px;color: #fff;display:flex; justify-content:space-between;text-align:center;margin-top: 20px;\'>
+        <span>医疗机构</span>
+        <span style=\'text-align:center;font-size: 24px;font-weight: bold;color:#00efff;\'>
+          ${params.data.value[2]['医疗机构']}家
+        </span> 
+      </div>
+      <div style=\'font-size: 18px;color: #fff;display:flex; justify-content:space-between;text-align:center;margin-top: 20px;\'>
+        <span>药品批发企业</span>
+        <span style=\'text-align:center;font-size: 24px;font-weight: bold;color:#00efff;\'>
+          ${params.data.value[2]['药品批发企业']}家
+        </span> 
+      </div>
+      <div style=\'font-size: 18px;color: #fff;display:flex; justify-content:space-between;text-align:center;margin-top: 20px;\'>
+        <span>药品生产企业</span>
+        <span style=\'text-align:center;font-size: 24px;font-weight: bold;color:#00efff;\'>
+          ${params.data.value[2]['药品生产企业']}家
+        </span> 
+      </div>
+      <div style=\'font-size: 18px;color: #fff;display:flex; justify-content:space-between;text-align:center;margin-top: 20px;\'>
+        <span>连锁总部</span>
+        <span style=\'text-align:center;font-size: 24px;font-weight: bold;color:#00efff;\'>
+          ${params.data.value[2]['连锁总部']}家
+        </span> 
+      </div>
+      <div style=\'font-size: 18px;color: #fff;display:flex; justify-content:space-between;text-align:center;margin-top: 20px;\'>
+        <span>连锁门店</span>
+        <span style=\'text-align:center;font-size: 24px;font-weight: bold;color:#00efff;\'>
+          ${params.data.value[2]['连锁门店']}家
+        </span> 
+      </div>
+      <div style=\'font-size: 18px;color: #fff;display:flex; justify-content:space-between;text-align:center;margin-top: 20px;\'>
+        <span>零售药店</span>
+        <span style=\'text-align:center;font-size: 24px;font-weight: bold;color:#00efff;\'>
+          ${params.data.value[2]['零售药店']}家
+        </span> 
       </div>
     </div>
   </div>`
