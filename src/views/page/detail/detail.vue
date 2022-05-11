@@ -122,7 +122,6 @@ export default {
       }
       dataTotal(qs.stringify(data)).then((res) => {
         this.totalData = res.data[0]
-        // console.log(res.data)
       })
     },
     //获取地图数据
@@ -135,7 +134,7 @@ export default {
         classname: ''
       }
       entInfo(qs.stringify(data)).then((res) => {
-        // console.log(,"---ddd---");
+        
         this.mapData=typeData(res.data)
         // this.mapData = res.data.map((item) => {
         //   return {
@@ -250,7 +249,6 @@ export default {
       this.getBarAraeData(param.name)
       this.aLabel = param.name+"总数（家）"
       this.isShowIcon = true
-      // console.log(param, '柱形图')
     },
     changeShowIcon(val) {
       this.isShowIcon = val

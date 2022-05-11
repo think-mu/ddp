@@ -1,4 +1,4 @@
-let areaData = ['荔湾区','海珠区','越秀区','天河区','黄埔区','白云区','番禺区','南沙区','从化区','花都区','增城区']
+let areaData = ['越秀区','海珠区','荔湾区','天河区','白云区','黄埔区','花都区','番禺区','南沙区','从化区','增城区']
 const coordinateData = {
   荔湾区: [113.243038, 23.074943],
   海珠区: [113.372008, 23.083131],
@@ -10,7 +10,7 @@ const coordinateData = {
   南沙区: [113.53738, 22.794531],
   从化区: [113.587386, 23.545283],
   花都区: [113.211184, 23.39205],
-  增城区: [113.829579, 23.290497] 
+  增城区: [113.829579, 23.290497], 
 }
 export const convertData = function (data) {
   const res = []
@@ -73,7 +73,7 @@ export const levelData = function (data) {
     }
   })
 
-  // console.log(arr,"level");
+ 
   return res
 }
 
@@ -122,6 +122,5 @@ export const typeData = function(data) {
       })
     }
   })
-  console.log(res,"---d01---");
   return res
 }

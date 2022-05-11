@@ -176,8 +176,7 @@ export default {
     pieClick(param) {
       this.$emit('pieClick', param)
     },
-        test() {
-      console.log(this.stackData,"se");
+    test() {
     }
   }
 }

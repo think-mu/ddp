@@ -97,12 +97,15 @@
               :rules="rules" 
               ref="ruleForm"
             >
-              <el-form-item label-width="80" prop="year">
+              <el-form-item label-width="60" prop="year">
                 <el-date-picker
                   v-model="formSpecial.year"
                   type="year"
+                  :clearable="false"
+                  size="mini"
                   popper-class="yselect"
                   :picker-options="pickerOptions"
+                  @change="changePlanYear"
                   :popper-append-to-body="false"
                   placeholder="选择年">
                 </el-date-picker>
@@ -135,15 +138,23 @@
             :mixXdata="mixXdata"
             :mixLineData="mixLineData"
             :mixBarData="mixBarData"
+            :successData="successData"
             v-if="!switchValue && isShowSec"
           ></mix-echart>
-          <stack-echart
+          <!-- <stack-echart  测试版本
             height="325px"
             ref="stackRef"
             @pieClick="pieClick"
             :stackData="stackData"
             v-if="isShowThi"
-          ></stack-echart>
+          ></stack-echart> -->
+          <multi-bar-echart-gsp
+            height="325px"
+            :source="sourceGsp"
+            :dimensions="dimensionsGsp"
+            v-if="isShowThi"
+          ></multi-bar-echart-gsp>
+
           <stack-simple-echart-se
             ref="se"
             height="325px"
@@ -208,6 +219,7 @@ import StackEchart from '@/components/page-echart/src/stack-echart'
 import StackSimpleEchart from '@/components/page-echart/src/stack-simple-echart'
 import StackSimpleEchartSe from '@/components/page-echart/src/stack-simple-echart-se'
 import MultiBarEchart from '@/components/page-echart/src/multi-bar-echart'
+import MultiBarEchartGsp from '@/components/page-echart/src/multi-bar-echart-gsp'
 import MapEchart from '@/components/page-echart/src/map-echart'
 import { dataTotal } from 'service/main/detail/detail'
 import { mainInfo } from 'service/main/main'
@@ -220,6 +232,7 @@ export default {
     BarEchart,
     MapEchart,
     MultiBarEchart,
+    MultiBarEchartGsp,
     LineEchart,
     MixEchart,
     StackEchart,
@@ -236,7 +249,7 @@ export default {
         '日常检查',
         '专项检查',
         '零售药店GSP跟踪检查',
-       /*  '有因检查',  //隐藏按钮
+       /*  '有因检查',  //测试版本
         '飞行检查' */
       ],
       mapData: [],
@@ -259,7 +272,11 @@ export default {
       pickYear: 2021,
       mapItem: 'review',
       source: [],
-      dimensions: [],
+      dimensions: [],      
+      sourceGsp: [],
+      dimensionsGsp: [],
+      sourceSe: [],
+      dimensionsSe: [],
       isShowFri: true, //日常，有因，飞行
       isShowSec: false, // 专项
       isShowThi: false, // gsp
@@ -269,12 +286,13 @@ export default {
       mixXdata: [], //专项混合图x轴数
       mixLineData: [], //专项混合图折线数据
       mixBarData: [], // 专项混合图柱形数据
+      successData: [], // 专项混合图完成任务量数据
       stackData: [], //gsp堆积图数据
       stackSimpleData: [],
       stackSimpleDatai:{},//专项详细数据
       formSpecial: {
         year: new Date('2021'),
-        plan: 680
+        plan: null
       }, //筛选
       PlanData1: [
         {
@@ -316,7 +334,7 @@ export default {
       stackOptions:{
          disabledDate(time) {
             return (  //Date.now()
-              time.getTime() > new Date('2021') ||
+              time.getTime() > Date.now() ||
               time.getTime() < new Date('2019')
             )
           },
@@ -326,27 +344,15 @@ export default {
     }
   },
   created() {
-    this.getPlanInfo({ vYaer: this.formSpecial.year,vPlanId: this.formSpecial.plan })
-    // console.log(this.PlanData);
+    
     this.getTotalData()
     this.getMapInfo()
     this.getBarFri()
     this.getLineInfo()
     this.getStackThi()
     this.getMixSec({ vYaer: this.mapYear.getFullYear(),vLevel: 2 })
-    // this.getLevelInfo()
-    // this.getPieAraeData('A')
   },
   computed: {
-    // btnStatus() {
-    //   if(this.formSpecial.plan&&this.formSpecial.year) {
-    //     return true
-    //   }else {
-    //     return false
-    //   }
-      
-    // },
-
     pickerOptions() {
       let that = this
       return{ 
@@ -374,7 +380,7 @@ export default {
               ) 
             }else if (that.radio == '零售药店GSP跟踪检查'){
                return (
-                time.getTime() > new Date('2021') ||
+                time.getTime() > Date.now() ||
                 time.getTime() < new Date('2019')
               ) 
             }  
@@ -398,7 +404,7 @@ export default {
               ) 
             }else if (that.radio == '零售药店GSP跟踪检查'){
                return (
-                time.getTime() > new Date('2021') ||
+                time.getTime() > Date.now() ||
                 time.getTime() < new Date('2019')
               ) 
             }  
@@ -410,20 +416,17 @@ export default {
   methods: {
     // getOption() {
     //     let that = this
-    //     console.log(that.radio,"xxx");
 
     //     return{ 
           
     //       disabledDate:(time)=> {
     //         if(that.radio == '日常检查'){
-    //           console.log(that.radio,"xxx1");
 
     //           return (
     //             time.getTime() > Date.now() ||
     //             time.getTime() < new Date('2016')
     //           )
     //         }else if (that.radio == '专项检查'){
-    //           console.log(that.radio,"xxx2");
     //            return (
     //             time.getTime() > Date.now() ||
     //             time.getTime() < new Date('2021')
@@ -547,6 +550,9 @@ export default {
           this.mixBarData = res.data.map((item) => {
             return item.JCRWL
           })
+          this.successData = res.data.map((item) => {
+            return item.SUCCESSNUM
+          })
           this.mixLineData = res.data.map((item) => {
             return parseInt(item.WCBFB)
           })
@@ -554,9 +560,11 @@ export default {
           this.planData = res.data.map((item) => {
             return { label: item.PLAN_NAME, value: item.PLAN_ID }
           })
+          this.formSpecial.plan = this.planData[0].value
+          this.getPlanInfo({ vYaer: this.formSpecial.year,vPlanId: this.formSpecial.plan })
+
         }
         // else if(vLevel==3){ //获取筛选方案信息
-        //   console.log(res,"999");
         //   this.stackSimpleDatai.REGIONNAME = res.data.map((item) => {
         //     return item.GROUPNAME
         //   })
@@ -592,7 +600,6 @@ export default {
         planId: vPlanId
       }
       mainInfo(qs.stringify(data)).then((res) => {
-        // console.log(res.data, 'planData')
           this.stackSimpleDatai.REGIONNAME = res.data.map((item) => {
             return item.GROUPNAME
           })
@@ -611,7 +618,6 @@ export default {
           this.stackSimpleDatai.FLAG = res.data.map((item) => {
             return parseInt(item.FLAG)
           })
-          // console.log(this.stackSimpleDatai,"000");
           if(this.switchValue){
             this.$nextTick(() => { 
                   this.$refs.se.draw();
@@ -631,53 +637,98 @@ export default {
         year: vYaer
       }
       mainInfo(qs.stringify(data)).then((res) => {
-        let arr = ['FH', 'XQZG', 'FHJC', 'YZWF', 'TY']
-        this.stackData.FH = res.data.map((item) => {
-          return item.FH
-        })
-        this.stackData.XQZG = res.data.map((item) => {
-          return item.XQZG
-        })
-        this.stackData.FHJC = res.data.map((item) => {
-          return item.FHJC
-        })
-        this.stackData.YZWF = res.data.map((item) => {
-          return item.YZWF
-        })
-        this.stackData.TY = res.data.map((item) => {
-          return item.TY
-        })
-        this.stackData.REGIONNAME = res.data.map((item) => {
-          return item.REGIONNAME
-        })
-        this.stackSimpleData.REGIONNAME = res.data.map((item) => {
-          return item.REGIONNAME
-        })
-        this.stackSimpleData.PLANNUM = res.data.map((item) => {
-          return item.PLANNUM
-        })
-        this.stackSimpleData.YJC = res.data.map((item) => {
-          return item.YJC
-        })
-        this.stackSimpleData.DFH = res.data.map((item) => {
-          return item.DFH
-        })
-        this.stackSimpleData.WJC = res.data.map((item) => {
-          return item.WJC
-        })
-        this.stackSimpleData.WCBFB = res.data.map((item) => {
-          return parseInt(item.WCBFB)
-        })
+        // let arr = ['FH', 'XQZG', 'FHJC', 'YZWF', 'TY']
+        // this.stackData.FH = res.data.map((item) => {  测试版本
+        //   return item.FH
+        // })
+        // this.stackData.XQZG = res.data.map((item) => {
+        //   return item.XQZG
+        // })
+        // this.stackData.FHJC = res.data.map((item) => {
+        //   return item.FHJC
+        // })
+        // this.stackData.YZWF = res.data.map((item) => {
+        //   return item.YZWF
+        // })
+        // this.stackData.TY = res.data.map((item) => {
+        //   return item.TY
+        // })
+        // this.stackData.REGIONNAME = res.data.map((item) => {
+        //   return item.REGIONNAME
+        // })
+
+
        if(pickId==1){
+          this.stackSimpleData.REGIONNAME = res.data.map((item) => {
+            return item.REGIONNAME
+          })
+          this.stackSimpleData.PLANNUM = res.data.map((item) => {
+            return item.PLANNUM
+          })
+          this.stackSimpleData.YJC = res.data.map((item) => {
+            return item.YJC
+          })
+          this.stackSimpleData.DFH = res.data.map((item) => {
+            return item.DFH
+          })
+          this.stackSimpleData.WJC = res.data.map((item) => {
+            return item.WJC
+          })
+          this.stackSimpleData.WCBFB = res.data.map((item) => {
+            return parseFloat(item.WCBFB)
+          })
           this.$nextTick(() => { 
                 this.$refs.gspRef.draw();
           });
+        }else if(pickId==2) {
+          this.sourceGsp = res.data.map((item) => {
+            return {
+              name: item.REGIONNAME,
+              符合: item.FH,
+              限期整改: item.XQZG,
+              复核检查: item.FHJC,
+              严重违反: item.YZWF,
+              停业: item.TY
+            }
+          })
+          this.dimensionsGsp = ['name', '符合', '限期整改', '复核检查', '严重违反', '停业']
+        }else {
+          this.sourceGsp = res.data.map((item) => {
+            return {
+              name: item.REGIONNAME,
+              符合: item.FH,
+              限期整改: item.XQZG,
+              复核检查: item.FHJC,
+              严重违反: item.YZWF,
+              停业: item.TY
+            }
+          })
+          this.dimensionsGsp = ['name', '符合', '限期整改', '复核检查', '严重违反', '停业']
+
+          this.stackSimpleData.REGIONNAME = res.data.map((item) => {
+            return item.REGIONNAME
+          })
+          this.stackSimpleData.PLANNUM = res.data.map((item) => {
+            return item.PLANNUM
+          })
+          this.stackSimpleData.YJC = res.data.map((item) => {
+            return item.YJC
+          })
+          this.stackSimpleData.DFH = res.data.map((item) => {
+            return item.DFH
+          })
+          this.stackSimpleData.WJC = res.data.map((item) => {
+            return item.WJC
+          })
+          this.stackSimpleData.WCBFB = res.data.map((item) => {
+            return parseInt(item.WCBFB)
+          })
         }
-        if(pickId==2){
-          this.$nextTick(() => { 
-                this.$refs.stackRef.draws();
-          });
-        }
+        // if(pickId==2){
+        //   this.$nextTick(() => { 
+        //         // this.$refs.stackRef.draws();
+        //   });
+        // }
       })
     },
     //获取更新饼形图辖区分级数据
@@ -752,7 +803,6 @@ export default {
           // this.getMixSec({ vYaer: yy,vLevel: 3, vPlanId: this.formSpecial.plan })
           // this.isShowSecCh = true
         } else {
-          // console.log('error submit!!');
           return false;
         }
       });
@@ -768,7 +818,6 @@ export default {
     },
     changeBarYear(param) {
       if(this.radio == '零售药店GSP跟踪检查'){
-
         this.getStackThi({vYaer:param.getFullYear(),pickId:1})
       }else{
         this.getBarFri({ vYaer: param.getFullYear(), vCategory: this.radio })
@@ -779,6 +828,9 @@ export default {
     },
     changeStackYear(param) {
       this.getStackThi({vYaer:param.getFullYear(),pickId:2})
+    },
+    changePlanYear(param) {
+      this.getMixSec({vYaer:param.getFullYear(),vLevel:2})
     },
     
   }
@@ -1003,11 +1055,13 @@ export default {
     height: 100%;
     display: flex;
     flex-direction: column;
+    
     .content-form {
       margin-top: 20px;
-      display: flex;
+      // display: flex;
       align-items: center;
-      flex-direction: row;
+      // flex-direction: row-reverse;
+      justify-content: space-between;
     }
     &-pie {
       margin-bottom: 15px;

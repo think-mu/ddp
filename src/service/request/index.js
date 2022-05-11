@@ -67,7 +67,6 @@ class SRequest {
     //单独拦截
     return new Promise((resolve, reject) => {
       // 单个请求对请求config的处理
-      // console.log(config,"config");
       // if (config.interceptors) {
       //   config = config.interceptors.requestInterceptor(config)
       // }

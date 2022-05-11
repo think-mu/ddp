@@ -85,7 +85,6 @@ export default {
             // color: '#fff',
             // formatter: '{a}'
             // formatter: function (params) {
-            //   console.log(params, '333')
             // }
           },
           // regions: [
@@ -130,7 +129,6 @@ export default {
                 params.data.value[2]['未评级']
               )
             } else if (params.seriesName == 'review') {
-              // console.log(params,"review");
               return (
                 params.name +
                 '</br>' +
@@ -184,7 +182,6 @@ export default {
                 params.data.value[2].WCBFB
               )
             } else if (params.seriesName == 'enforce') {
-              // console.log(params);
               return (
                 params.name +
                 '</br>' +
@@ -255,7 +252,6 @@ export default {
                   fontSize: 9
                 },
                 formatter(value) {
-                  console.log(value, '000000')
                   return value.data.value[2] + '家'
                 }
               }

@@ -4,7 +4,7 @@
       <template #header>
         <div class="card-header">
           <span class="card-header-title"><img src="~@/assets/img/card/card-icon.png" alt="">{{ title }}</span>
-          <slot name='select'></slot>
+          <slot name='select' class="card-header-select"></slot>
           <i class="el-icon-refresh-left" v-if="isShowIcon" @click="changeShowIcon"></i>
           <img class="card-header-line" src="~@/assets/img/card/card-line.png" alt="">
         </div>
@@ -121,16 +121,24 @@ export default {
 
 .card-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  flex-direction: row-reverse;
   align-items: center;
   height: 60px;
   position: relative;
   &-title {
-    margin-left: 16px;
+    position:absolute;
+    left:0px;
+    margin-left: 8px;
     margin-bottom: 5px;
+    margin-right: 10px;
     img {
       margin-right: 15px;
     }
+  }
+  &-select {
+    // position: absolute;
+    // right: 10px;
   }
   &-line { 
     position: absolute;

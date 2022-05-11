@@ -11,7 +11,7 @@
 <script>
 import * as echarts from 'echarts'
 import BaseEchart from '@/base-ui/echart/base-echart'
-import { toolHtmlMultiBar } from '@/utils/tool-html'
+import { toolHtmlMultiGsp } from '@/utils/tool-html'
 
 export default {
   name: '',
@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       optionLabel: {
-        show: true,
+        show: false,
         color: '#fff',
         fontSize: 14,
         position: 'top',
@@ -94,8 +94,7 @@ export default {
           backgroundColor: 'opacity',
           borderWidth: 0,
           formatter: function (params) {
-            console.log(params);
-            return toolHtmlMultiBar(params)
+            return toolHtmlMultiGsp(params)
           }
         },
         grid: {
@@ -144,9 +143,11 @@ export default {
         // Declare several bar series, each will be mapped
         // to a column of dataset.source by default.
         series: [
-          { type: 'bar', barWidth: '20', label: this.optionLabel, itemStyle: this.optionItemStyle('rgba(17,117,253, 0.6)','#01ADEA') },
-          { type: 'bar', barWidth: '20', label: this.optionLabel, itemStyle: this.optionItemStyle('rgba(245,130,75, 0.6)','#FCC70A') },
-          { type: 'bar', barWidth: '20', label: this.optionLabel, itemStyle: this.optionItemStyle('rgba(0,106,117, 0.6)','#83D372') }
+          { type: 'bar', barWidth: '8', label: this.optionLabel, itemStyle: this.optionItemStyle('rgba(17,117,253, 0.6)','#01ADEA') },
+          { type: 'bar', barWidth: '8', label: this.optionLabel, itemStyle: this.optionItemStyle('rgba(245,130,75, 0.6)','#FCC70A') },
+          { type: 'bar', barWidth: '8', label: this.optionLabel, itemStyle: this.optionItemStyle('rgba(0,106,117, 0.6)','#83D372') },
+          { type: 'bar', barWidth: '8', label: this.optionLabel, itemStyle: this.optionItemStyle('rgb(255,148,136)','rgba(255,148,136,.5)') },
+          { type: 'bar', barWidth: '8', label: this.optionLabel, itemStyle: this.optionItemStyle('rgb(255,105,0)','rgba(255,105,0,.5)') },
         ]
       }
     }

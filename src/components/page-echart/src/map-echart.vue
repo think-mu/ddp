@@ -99,7 +99,6 @@ export default {
           borderWidth: 0,
           // alwaysShowContent: true,
           formatter: function (params) {
-            // console.log(params, 'params')
             if (params.seriesName == 'detail') {
               return toolHtmlI(params)
             } else if (params.seriesName == 'category') {
@@ -170,12 +169,10 @@ export default {
                   // return resultLabeltip
                   return  '{txt|'+params.name+'}';
                 } else if (params.seriesName == 'review') {
-                  // console.log(params,"review2");
                   // return params.name
                   return  '{txt|'+params.name+'}';
                   
                 } else if (params.seriesName == 'enforce') {
-                  // console.log(params,"review2");
                   // return params.name
                   return  '{txt|'+params.name+'}';
                   

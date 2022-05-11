@@ -6,6 +6,14 @@ export function toolHtmlI(params) {
     <div style=\'text-align:center;font-size: 20px;color: #fff;;letter-spacing: 0;padding: 0px;\'> ${params.name}</div>
     <div style=\'display: flex;flex-direction: column;align-items: left;\'>
       <div style=\'font-size: 18px;color: #fff;display:flex; justify-content:space-between;text-align:center;margin-top: 20px;\'>
+        <span>药品企业总数</span>
+        <span style=\'text-align:center;font-size: 24px;font-weight: bold;color:#00efff;\'>
+          ${params.data.value[2]['医疗机构']+params.data.value[2]['药品批发企业']
+          +params.data.value[2]['药品生产企业']+params.data.value[2]['连锁总部']
+          +params.data.value[2]['连锁门店']+params.data.value[2]['零售药店']}家
+        </span> 
+      </div>
+      <div style=\'font-size: 18px;color: #fff;display:flex; justify-content:space-between;text-align:center;margin-top: 20px;\'>
         <span>医疗机构</span>
         <span style=\'text-align:center;font-size: 24px;font-weight: bold;color:#00efff;\'>
           ${params.data.value[2]['医疗机构']}家
@@ -335,22 +343,24 @@ export function toolHtmlMix(params) {
       \'>
     <div style=\'text-align:center; font-size: 20px;color: #fff;;letter-spacing: 0;padding: 0px;\'> ${params[0].name}</div>
     <div style=\'display: flex;flex-direction: column;align-items: left;color: #fff;\'>
-      <div style=\'font-size: 18px;display:flex; justify-content:space-between;align-items: center; text-align:left;margin-top: 14px;\'>
-        <div style=\'margin-right:10px; display:flex; align-items: center;' >
-          <div style=\'height:10px;width: 10px; border-radius: 5px; background-image: linear-gradient(to bottom,${params[0].color.colorStops[0].color}, ${params[0].color.colorStops[1].color}) !important;margin-right:10px;\'></div>
-             检查任务量
-          </div>
-          <span style=\'text-align:center;font-size: 24px; font-weight: bold;color:#00efff;\'>
-          ${params[0].value}
+        <div style=\'font-size: 18px;display:flex; justify-content:space-between;align-items: center; text-align:left;margin-top: 14px;\'>
+            <span style=\'margin-right:10px;'>${params[0].marker}检查任务量</span>
+            <span style=\'text-align:center;font-size: 24px; font-weight: bold;color:#00efff;\'>
+            ${params[0].value}
+            </span> 
+        </div>
+        <div style=\'font-size: 18px;display:flex; justify-content:space-between;align-items: center;text-align:left;margin-top: 10px;\'>
+          <span style=\'margin-right:10px;'>${params[1].marker}完成任务量</span>
+          <span style=\'text-align:center;font-size: 22px; font-weight: bold;color:#00efff;\'>
+          ${params[1].value}
           </span> 
-      </div>
-      <div style=\'font-size: 18px;display:flex; justify-content:space-between;align-items: center;text-align:left;margin-top: 10px;\'>
-        <div style=\'height:10px;width: 10px; border-radius: 5px; background-color: ${params[1].color}; !important;margin-right:10px;\'></div>
-        <span style=\'margin-right:10px;'>完成百分比（%）</span>
-        <span style=\'text-align:center;font-size: 22px; font-weight: bold;color:#00efff;\'>
-         ${params[1].value}%
-        </span> 
-      </div>
+        </div>
+        <div style=\'font-size: 18px;display:flex; justify-content:space-between;align-items: center;text-align:left;margin-top: 10px;\'>
+          <span style=\'margin-right:10px;'>${params[2].marker}完成百分比（%）</span>
+          <span style=\'text-align:center;font-size: 22px; font-weight: bold;color:#00efff;\'>
+          ${params[2].value}%
+          </span> 
+        </div>
     </div>
   </div>`
   return resultTooltip
@@ -390,10 +400,51 @@ export function toolHtmlStack(params) {
       <div style=\'font-size: 18px;display:flex; justify-content:space-between;align-items: center;text-align:left;margin-top: 8px;\'>
         <span style=\'margin-right:10px;'>${params[4].marker}${params[4].seriesName}</span>
         <span style=\'text-align:center;font-size: 22px; font-weight: bold;color:#00efff;\'>
-         ${params[4].value}
+         ${params[4].value}%
         </span> 
       </div>
     </div>
   </div>`
   return resultTooltip
 }
+  export function toolHtmlMultiGsp(params) {
+    const resultTooltip = 
+    `<div style=\'background-color: rgba(20, 74, 116,.9);box-shadow: 0px 0px 3px 2px #01cfff;
+        padding: 12px 20px; border:1px transparent solid;border-image:linear-gradient(to right,rgba(4,127,156,1),#e9eceb,#01cfff) 1 10;
+        \'>
+      <div style=\'text-align:center; font-size: 20px;color: #fff;;letter-spacing: 0;padding: 0px;\'> ${params[0].name}</div>
+      <div style=\'display: flex;flex-direction: column;align-items: left;color: #fff;\'>
+        <div style=\'font-size: 18px;display:flex; justify-content:space-between;align-items: center; text-align:left;margin-top: 14px;\'>
+          <span style=\'margin-right:10px;'>${params[0].marker}${params[0].seriesName}</span>
+          <span style=\'text-align:center;font-size: 22px; font-weight: bold;color:#00efff;\'>
+           ${params[0].value['符合']}
+          </span> 
+        </div>
+        <div style=\'font-size: 18px;display:flex; justify-content:space-between;align-items: center;text-align:left;margin-top: 8px;\'>
+          <span style=\'margin-right:10px;'>${params[1].marker}${params[1].seriesName}</span>
+          <span style=\'text-align:center;font-size: 22px; font-weight: bold;color:#00efff;\'>
+           ${params[1].value['限期整改']}
+          </span> 
+        </div>
+        <div style=\'font-size: 18px;display:flex; justify-content:space-between;align-items: center;text-align:left;margin-top: 8px;\'>
+          <span style=\'margin-right:10px;'>${params[2].marker}${params[2].seriesName}</span>
+          <span style=\'text-align:center;font-size: 22px; font-weight: bold;color:#00efff;\'>
+          ${params[2].value['复核检查']}
+          </span> 
+        </div>
+        <div style=\'font-size: 18px;display:flex; justify-content:space-between;align-items: center;text-align:left;margin-top: 8px;\'>
+          <span style=\'margin-right:10px;'>${params[3].marker}${params[3].seriesName}</span>
+          <span style=\'text-align:center;font-size: 22px; font-weight: bold;color:#00efff;\'>
+           ${params[3].value['严重违反']}
+          </span> 
+        </div>
+        <div style=\'font-size: 18px;display:flex; justify-content:space-between;align-items: center;text-align:left;margin-top: 8px;\'>
+          <span style=\'margin-right:10px;'>${params[4].marker}${params[4].seriesName}</span>
+          <span style=\'text-align:center;font-size: 22px; font-weight: bold;color:#00efff;\'>
+           ${params[4].value['停业']}
+          </span> 
+        </div>
+      </div>
+    </div>`
+    return resultTooltip
+  }

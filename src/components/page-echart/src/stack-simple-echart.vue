@@ -217,7 +217,9 @@ export default {
                   color: '#fff',
                   fontSize: 14,
                   position: 'top',
-                  formatter: '{c}%'
+                  formatter: function (params) {
+                   return params.value+"%"
+                  }
                 }
               }
             },

@@ -66,7 +66,6 @@ import icon4 from 'assets/img/side/icon-4.png'
     created() {
       this.userMenus = userMenus
       this.setCurrentRoute()
-      // console.log(userMenus,"nav");
     },
     watch: {
       $route () {
@@ -75,7 +74,6 @@ import icon4 from 'assets/img/side/icon-4.png'
     },
     methods: {
       handleMenuItemClick(item) {
-        // console.log(item);
         if(item){
           this.$router.push(item.url)
         }else{

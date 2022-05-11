@@ -4,6 +4,14 @@
       <el-col :span="11">
         <s-card :title="titleLabel1" class="map">
           <template v-slot:select>
+            <el-select v-model="typeValue" @change="typeSelect" class="content-select" :popper-append-to-body="false" >
+              <el-option
+                v-for="item in typeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
             <el-date-picker
               v-model="cYear"
               type="year"
@@ -14,14 +22,7 @@
               @change="changeYear"
               placeholder="选择年份">
             </el-date-picker>
-            <el-select v-model="typeValue" @change="typeSelect" class="content-select" :popper-append-to-body="false" >
-              <el-option
-                v-for="item in typeOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
+
           </template>
           <map-echart height="750px" :mapData="mapData" mapName="category"></map-echart>
         </s-card>
@@ -110,7 +111,7 @@ import { levelData,convertData } from '@/utils/convert-data'
         pickerOptions: {
           disabledDate(time) {
             return (  //Date.now()
-              time.getTime() > new Date('2021') ||
+              time.getTime() > Date.now() ||
               time.getTime() < new Date('2015')
             )
           },
@@ -191,6 +192,21 @@ import { levelData,convertData } from '@/utils/convert-data'
           })
         })
       },
+      //获取某级别各区域数据  测试版本
+      getLevelOfAreaData({ vYear = 2021, vClassName = '',Vriskgrade = 'A' } = {}) {
+        const data = {
+          region: '',
+          action: 'credit',
+          year: vYear,
+          type: 'T01',
+          level: 1,
+          classname: vClassName,
+          riskgrade: Vriskgrade
+        }
+        categoryInfo(qs.stringify(data)).then((res) => {
+
+        })
+      },
       //获取更新饼形图辖区分级数据
       getPieAraeData(param) {
         setTimeout(() => {
@@ -240,7 +256,6 @@ import { levelData,convertData } from '@/utils/convert-data'
       /* 饼形图事件 start*/
       //全市分级饼形图--点击事件
       pieClick(param) {
-        // console.log(param,"并行");
         this.getPieAraeData(param.name)
         this.pieTitle2 = param.name + '级别药品企业数量'
         
@@ -253,17 +268,15 @@ import { levelData,convertData } from '@/utils/convert-data'
         this.getBarAraeData(param.name)
         this.isShowIcon = true
         this.aLabel = param.name+"级别总数（家）"
-        // console.log(param, '柱形图')
       },
       changeShowIcon(val) {
-        // console.log(val)
         this.isShowIcon = val
         this.aLabel = "各级别药品企业总数（家）"
       },
       /* 柱形图事件 end*/
       //企业类型选择事件
       typeSelect(param) {
-        console.log(this.cYear);
+        console.log(param);
         if(param == "全部"){
           this.getCategoryInfo({ vYear: this.cYear.getFullYear() })
           this.getLevelInfo({ vYear: this.cYear.getFullYear() })

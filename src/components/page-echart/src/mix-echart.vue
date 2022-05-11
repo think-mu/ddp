@@ -33,6 +33,9 @@ export default {
     mixLineData: {
       type: Array
     },
+    successData: {
+      type: Array
+    },
     mixBarData: {
       type: Array
     }
@@ -58,19 +61,15 @@ export default {
         // },
         tooltip: {
           trigger: 'axis',
-          padding: 0,
+          // padding: 0,
           backgroundColor: 'opacity',
           borderWidth: 0,
           formatter: function (params) {
-            // console.log(params);
             return toolHtmlMix(params)
-          }
-          // axisPointer: {
-          //     type: 'cross',
-          //     label: {
-          //         backgroundColor: '#283b56'
-          //     }
-          // }
+          },
+           axisPointer: {
+            type: 'shadow'
+          },
         },
         legend: {
           data: ['检查任务量', '完成百分比（%）'],
@@ -168,6 +167,19 @@ export default {
                 barBorderRadius: 6
               }
             }
+          },
+          {
+            name: '完成任务量',
+            type: 'line',
+            data: this.successData,
+            yAxisIndex: 1,
+            color: '#ffe894',
+            itemStyle: {
+              opacity: 0,
+            },
+            lineStyle: {
+              opacity: 0,
+            } 
           },
           {
             name: '完成百分比（%）',

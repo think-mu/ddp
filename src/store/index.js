@@ -19,7 +19,6 @@ const store = new Vuex.Store({
 })
 
 export function setupStore() {
-  // console.log("st");
   //同步localstroe 和vuex数据，
 }
 
