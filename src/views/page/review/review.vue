@@ -8,9 +8,34 @@
               <el-radio-button
                 v-for="(item, index) in btnName"
                 :label="item"
+                :key="item"
               ></el-radio-button>
             </el-radio-group>
           </div>
+        </div>
+        <div class="map-hd">
+            <p class="title">今日统计数据 ▶</p>
+            <ul>
+              <li>
+                <span>{{ totalData[0].JCS }}</span><span>总检查数</span>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <span>{{ totalData[0].FHS }}</span><span>通过数</span>
+              </li>
+            </ul>  
+            
+            <ul>
+              <li>
+                <span>{{ totalData[0].BFHS }}</span><span>不通过数</span>
+              </li>
+            </ul>  
+            <ul>  
+              <li>
+                <span>{{ totalData[0].ZGS }}</span><span>限期整改数</span>
+              </li>
+            </ul>
         </div>
         <s-card :title="titleLabel1" class="map">
           <template v-slot:select >
@@ -25,7 +50,7 @@
               placeholder="选择年份">
             </el-date-picker>
           </template>
-          <div class="map-hd">
+          <!-- <div class="map-hd">
             <ul>
               <li>
                 <span>{{ totalData[0].FHS }}</span><span>符合数</span>
@@ -46,14 +71,23 @@
                 <span>{{ totalData[0].ZGS }}</span><span>整改数</span>
               </li>
             </ul>
-          </div>
+          </div> -->
           <map-echart
-            height="695px"
+            height="605px"
             width="100%"
             :mapData="mapData"
             :mapName="mapItem"
+            @barClick="showArea"
           ></map-echart>
         </s-card>
+        <el-dialog :title="dialogTitle" :visible.sync="dialogTableDate" :modal='false' height="200" center :modal-append-to-body="true" >
+          <el-table :data="gridDateData" height="500">
+            <el-table-column property="REGIONNAME" label="街道" width="220"></el-table-column>
+            <el-table-column property="XYZG" label="需整改数量" ></el-table-column>
+            <el-table-column property="YZGCNUM" label="已整改数量" ></el-table-column>
+            <el-table-column property="CHECKNUM" label="检查数量" ></el-table-column>
+          </el-table>
+        </el-dialog>
       </el-col>
       <el-col :span="12" class="content-right">
         <s-card :title="titleLabel2" class="content-right-pie">
@@ -205,6 +239,7 @@
         </s-card>
       </el-col>
     </el-row>
+    <!-- <span class="tip">*建议用谷歌、360极速浏览器、火狐浏览器、QQ浏览器10+、IE10+等浏览器，否则页面可能会存在显示异常现象</span> -->
   </div>
 </template>
 
@@ -338,9 +373,12 @@ export default {
               time.getTime() < new Date('2019')
             )
           },
-      }
+      },
       // mapOptions: this.getOption()
-
+      itemSelect: '',
+      dialogTableDate: false, //地图弹窗响应
+      gridDateData: [], //地图辖区表格数据
+      dialogTitle: ''
     }
   },
   created() {
@@ -414,6 +452,17 @@ export default {
       },
   },
   methods: {
+    showArea(param) {
+      this.dialogTitle = param.name + '数据'
+      this.dialogTableDate = true
+      this.gridDateData= []
+      
+      if (this.itemSelect == '零售药店GSP跟踪检查') {
+
+      }else {
+        this.getStreetInfo({ VRegion: param.name,vYaer: this.mapYear.getFullYear(),vCategory: this.itemSelect})
+      }
+    },
     // getOption() {
     //     let that = this
 
@@ -473,6 +522,19 @@ export default {
             value: item
           }
         })
+      })
+    },
+    getStreetInfo({ VRegion='',vYaer = 2021, vCategory = '日常检查' } = {}) {
+      const data = {
+        region: VRegion,
+        level: 1,
+        action: 'normal',
+        type: 'T01',
+        year: vYaer,
+        category: vCategory
+      }
+      mainInfo(qs.stringify(data)).then((res) => {
+        this.gridDateData = res.data
       })
     },
     getGspInfo({ vYaer = 2021 } = {}) {
@@ -745,6 +807,7 @@ export default {
       this.mapYear = new Date('2021')
       this.barYear = new Date('2021')
       this.getTotalData({ vCategory: val })
+      this.itemSelect = val
       if (val == '零售药店GSP跟踪检查') {
         this.isShowFri = false
         this.isShowSec = false
@@ -898,6 +961,13 @@ export default {
 }    
 .review {
   .el-row,
+  // .tips {
+  //   position: absolute;
+  //   bottom: 0%;
+  //   left: 50%;
+  //   transform: translate(0%, -50%);
+  //   color: #fff;
+  // }
   .el-col {
     height: 100% !important;
   }
@@ -906,7 +976,7 @@ export default {
     width: 100%;
     border-radius: 5px;
     // background: linear-gradient(to right, #82badf8f, #0ca6daa1) !important;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
 
     &-btn {
       line-height: 50px;
@@ -1008,16 +1078,13 @@ export default {
       }
     } */
   }
-  .map {
-    position: relative;
-    .map-hd {
-      position: absolute;
-      top: 50px;
-      left: -10px;
+  .map-hd {
       display: flex;
-      width:56%;
+      width:100%;
+      
+      // align-items: flex-start;
       ul {
-        width: 260px;
+        width: 220px;
         li {
           flex: 1;
           list-style-type: none;
@@ -1025,15 +1092,17 @@ export default {
           flex-direction: column;
           justify-content: space-evenly;
           text-align: center;
-          height: 113px;
+          height: 46px;
           background: url('../../../assets/img/total-icon.png') no-repeat center
             top;
+          background-size: 60px 60px;
+          margin-bottom: 10px;
         }
         span:first-child {
           font-family: 'electronicFont';
-          line-height: 40px;
-          font-size: 40px;
-          margin-top: 10px;
+          line-height: 45px;
+          font-size: 36px;
+          margin-top: 4px;
           // color: #faa60b;
           background-image: -webkit-linear-gradient(bottom, #ff7200, #ffee30);
           -webkit-background-clip: text;
@@ -1045,10 +1114,19 @@ export default {
           font-size: 18px;
           color: #e5f0f1;
           text-shadow: 2px 2px 8px #aaf2ff;
-          margin-top: 30px;
+          margin-top: 15px;
         }
       }
+      .title {
+        width: 220px;
+        color:rgba(231, 231, 231, 0.932) !important;
+        font-size: 16px;
+        justify-content: center;
+        margin-right: -40px;
+      }
     }
+  .map {
+    position: relative;
   }
 
   .content-right {

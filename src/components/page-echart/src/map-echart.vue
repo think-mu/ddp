@@ -4,6 +4,7 @@
       :options="options"
       :height="height"
       :width="width"
+      @pieClick="barClick"
     ></base-echart>
   </div>
 </template>
@@ -39,13 +40,17 @@ export default {
     return {}
   },
   mounted() {},
-  methods: {},
+  methods: {
+    barClick(param) {
+      this.$emit('barClick', param)
+    }
+  },
   computed: {
     options() {
       return {
         grid: {
           left: '0%',
-          top: '10%',
+          top: '0%',
           right: '0%',
           bottom: '4%',
           containLabel: true

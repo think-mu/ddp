@@ -2,16 +2,15 @@
   <div class="detail">
     <el-row :gutter="20">
       <el-col :span="11">
+        <div class="map-hd">
+          <p class="title">今日统计数据 ▶</p>
+          <ul>
+            <li><span>{{ totalData.FZS }}</span><span>许可证发证数</span></li>
+            <li><span>{{ totalData.GQS }}</span><span>许可证过期数</span></li>
+          </ul>
+        </div>
         <s-card title="药品企业数量" class="map">
-          <div class="map-total">
-            <div class="map-total-hd">
-              <ul>
-                <li><span>{{ totalData.FZS }}</span><span>许可证发证数</span></li>
-                <li><span>{{ totalData.GQS }}</span><span>许可证过期数</span></li>
-              </ul>
-            </div>
-          </div>
-          <map-echart height="750px" :mapData="mapData" mapName="detail"></map-echart>
+          <map-echart height="652px" :mapData="mapData" mapName="detail"></map-echart>
         </s-card>
       </el-col>
       <el-col :span="13" class="content-right">
@@ -267,6 +266,59 @@ export default {
   .el-col {
     height: 100% !important;
   }
+  // .map-total {
+    // position: absolute;
+    // top: 70px;
+    // left: 0px;
+    // height: 100px;
+  .map-hd {
+    display: flex;
+    flex-direction: row;
+    width:100%;
+    ul {
+      display: flex;
+      justify-content: space-between;
+      width: 50%;
+      margin-top: 12px;
+      li {
+        flex: 1;
+        list-style-type: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        text-align: center;
+        height: 60px;
+        background: url('../../../assets/img/total-icon.png') no-repeat center top;
+        background-size: 70px 70px;
+        margin-bottom: 6px;
+      }
+      span:first-child {
+        font-family: 'electronicFont';
+        line-height: 40px;
+        font-size: 40px;
+        margin-top: 6px;
+        background-image:-webkit-linear-gradient(bottom,#FF7200,#FFEE30);
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+      }
+      span:last-child {
+        font-family: 'electronicFont';
+        line-height: 18px;
+        font-size: 18px;
+        color: #e5f0f1;
+        text-shadow:2px 2px 8px #aaf2ff;
+        margin-top: 20px;
+      }
+      
+    }
+    .title {
+      width: 220px;
+      color:rgba(231, 231, 231, 0.932) !important;
+      text-align: left;
+      font-size: 16px;
+      margin-right: -40px;
+    }
+  }
   .map {
     position: relative;
     .map-content {
@@ -293,49 +345,7 @@ export default {
       }
       // border: 1px rgb(26, 205, 218) solid;
     }
-    .map-total {
-      position: absolute;
-      top: 70px;
-      left: 0px;
-      // height: 100px;
-      
-      
-      &-hd {
-        ul {
-          display: flex;
-          width: 260px;
-          li {
-            flex: 1;
-            list-style-type: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-evenly;
-            text-align: center;
-            height: 113px;
-            background: url('../../../assets/img/total-icon.png') no-repeat center top;
-          }
-          span:first-child {
-            font-family: 'electronicFont';
-            line-height: 40px;
-            font-size: 40px;
-            margin-top: 10px;
-            // color: #faa60b;
-            background-image:-webkit-linear-gradient(bottom,#FF7200,#FFEE30);
-            -webkit-background-clip:text;
-            -webkit-text-fill-color:transparent;
-          }
-          span:last-child {
-            font-family: 'electronicFont';
-            line-height: 18px;
-            font-size: 18px;
-            color: #e5f0f1;
-            text-shadow:2px 2px 8px #aaf2ff;
-            margin-top: 30px;
-          }
-          
-        }
-      }
-    }
+    
   }
 }
 
